@@ -1,0 +1,26 @@
+[
+    {
+        "pcname": "nbx-01",
+        "username": "teste",
+        "password": "pass",
+        "uuid": "889562ce-2d38-468d-9166-bed16dfb8bd5"
+    },
+    {
+        "pcname": "nbx-02",
+        "username": "teste",
+        "password": "pass",
+        "uuid": "92bd335f-b4b2-4aef-9a20-8bf59c7988b2"
+    },
+    {
+        "pcname": "nbx03",
+        "username": "teste",
+        "password": "pass",
+        "uuid": "9d63f0d0-77f1-428f-815f-0c9934767fee"
+    },
+    {
+        "pcname": "dfgfdg",
+        "username": "dfgfd",
+        "password": "dfgfd",
+        "uuid": "94daf27f-d57b-4ca1-a636-a5d9acd04dba"
+    }
+]

@@ -1,0 +1,488 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    overflow: hidden; /* Impede barras de rolagem para simular desktop */
+    position: relative; /* Relativo para que #desktop ocupe o espaço total */
+}
+
+#taskbar {
+    width: 100%;
+    height: 54px;
+    background-color: #1c1c1c;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    z-index: 1000;
+    display: flex;
+    justify-content: left; /* Distribui o espaço entre os itens */
+    align-items: center;
+    padding: 0 10px;
+    border-top: ridge #404040 1px;
+}
+
+
+
+#topbar {
+    width: 100vw;
+    height: 28px;
+    background-color: #1c1c1c;
+    border-bottom: ridge #404040 1px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    display: flex;
+    justify-content: left; /* Distribui o espaço entre os itens */
+    align-items: center;
+    padding: 0 10px;
+}
+
+#menu {
+    width: 48px;
+    height: 48px;
+    border-radius: 10px;
+    cursor: pointer;
+    background-image: url('../img/menu.png');
+    background-size: 28px;
+    background-position: center;
+    background-repeat: no-repeat;
+    box-shadow: 0px -2px 6px rgba(0, 0, 0, 0.1);
+}
+
+#menu:hover {
+    background-color: #383838;
+    transition: transform 0.3s ease; /* Transição para transform */
+    transform: scale3d(0, 100%);
+    border: #373737 1px solid;
+}
+
+#menu-content {
+    width: 300px;
+    height: 350px;
+    position: absolute;
+    bottom: 45px; /* Posiciona o menu-content na parte inferior */
+    left: 15px;
+    background-color: #1c1c1c;
+    border: #373737 1px solid;
+    border-radius: 15px;
+    display: none; /* Inicialmente escondido */
+    transform: translateY(100%); /* Inicialmente fora da tela */
+    transition: transform 0.3s ease; /* Transição para transform */
+    padding: 10px;
+    color: #fff;
+    z-index: 100000; /* Z-index menor que o menu-content-bar */
+}
+
+#menu-content-fixed{
+    width: 100%;
+    height: 40px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    background-color: #000;
+    z-index: 100001;
+}
+
+
+
+#menu-content.show {
+    transform: translateY(0); /* Move o elemento para sua posição original */
+}
+
+#menu-content ul {
+    width: 100%;
+    height: calc(100% - 24px); /* Ajusta a altura para levar em conta a barra inferior */
+    margin: 0;
+    padding: 0;
+    overflow-y: auto;
+}
+
+#menu-content ul li {
+    width: 100%;
+    height: 30px;
+    text-align: left;
+    align-items: center;
+    list-style: none;
+    display: flex;
+    gap: 5px;
+}
+
+#menu-content ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 18px;
+}
+
+#menu-content ul li img {
+    max-width: 24px;
+    max-height: 24px;
+}
+
+#menu-content ul li a:hover {
+    opacity: 0.7;
+}
+
+
+
+#menutop{
+    min-width:24px;
+    width: auto;
+    height: 24px;
+    padding: 2px 6px;
+    right: 10px;
+    position: absolute;
+    cursor: pointer;
+    color: #f0f0f0;
+    display: flex;
+    flex-direction: row;
+    text-align: center;
+    justify-content: right;
+    align-items: center;
+    background-image: url('../img/power.png');
+    background-position: right;
+    background-repeat: no-repeat;
+    background-size: 16px;
+    z-index: 998;
+}
+
+#menutop span{
+    width: auto;
+    margin-right: 20px;
+}
+
+#menutopcontent {
+    display: none;
+    align-items: center;
+    justify-content: left;
+    width: 200px;
+    min-height: 50px;
+    height: auto;
+    background-color: rgba(0, 0, 0, 0.7);
+    position: absolute;
+    top: 28px;
+    right: 0;
+    transform: translateY(-100%);
+    transition: transform 0.3s ease, opacity 0.3s ease; /* Transição para transform e opacity */
+    z-index: 997;
+    opacity: 0; /* Inicialmente invisível */
+    
+}
+
+#menutopcontent.show {
+    display: block;
+    transform: translateY(0%);
+    opacity: 1; /* Torna visível */
+}
+
+#menutopcontent ul{
+    width: 100%;
+    height: 100%;
+    list-style: none;
+    color: #f0f0f0;
+    padding: 5px;
+}
+
+#menutopcontent ul li{
+    width: 100%;
+    height: 24px;
+    margin-top: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    
+}
+
+#menutopcontent ul li:hover{
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+}
+
+#menutopcontent ul li a{
+    color: #fff;
+    text-decoration: none;
+}
+
+
+
+.logout{
+    width: 100%;
+    height: 24px;
+    background-image: url('../img/power.png');
+    background-position: calc(100% - 10px);
+    background-size: 16px;
+    background-repeat: no-repeat;
+}
+
+.user{
+    width: 100%;
+    height: 24px;
+    background-image: url('../img/user.png');
+    background-position: calc(100% - 10px);
+    background-size: 16px;
+    background-repeat: no-repeat;
+}
+
+#clock {
+    right: 10px;
+    color: #ccc;
+    width: 112px;
+    position: absolute;
+    padding: 3px 6px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.notify{
+    position: absolute;
+    right: -3px;
+    bottom: 5px;   
+    width: 32px;
+}
+
+#clock:hover {
+    background-color: #202020;
+}
+
+.clock-container {
+    display: inline-block;
+    text-align: right; /* Alinha o conteúdo dentro da div à direita */
+    right: 40px;
+}
+
+.time {
+    display: block; /* Garante que o horário fique em uma linha separada */
+}
+
+#notifications:hover {
+    opacity: 0.7;
+}
+
+#notifications-center {
+    width: 250px;
+    height: calc(100vh - 82px);
+    position: absolute;
+    right: 0;
+    top: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    gap: 5px;
+    overflow-y: auto;
+    display: none; /* Inicialmente escondido */
+    transform: translateX(100%); /* Inicialmente fora da tela */
+    transition: transform 0.5s ease, opacity 0.5s ease; /* Transição para transform e opacity */
+    opacity: 0; /* Inicialmente transparente */
+    z-index: 10000; /* Z-index maior para garantir que fique acima de tudo */
+}
+
+#notifications-center.show {
+    transform: translateX(0); /* Move o elemento para sua posição original */
+    opacity: 1; /* Torna o elemento opaco */
+}
+
+#taskbar-apps {
+    display: flex;
+    gap: 5px;
+    overflow-x: auto; /* Rolagem horizontal se houver muitos ícones */
+    text-align: left;
+    position: relative;
+    margin-left: 15px;
+}
+
+.taskbar-app {
+    background-color: #191919; /* Cor de fundo do ícone do aplicativo na barra de tarefas */
+    color: #fff; /* Cor do texto do ícone do aplicativo na barra de tarefas */
+    padding: 3px 10px;
+    cursor: pointer;
+    float: left;
+    width: auto;
+    height: 54px;
+    display: flex;
+    align-items: center;
+    left: 70px;
+    border-top: solid #504f4f 5px;
+}
+
+.taskbar-app:hover {
+    background-color: #504f4f; /* Cor de fundo ao passar o mouse */
+}
+
+.taskbar-app img{
+    width: 32px;
+}
+
+#desktop {
+    width: 100%;
+    height: calc(100vh - 50px);
+    padding: 20px;
+    overflow-y: auto; /* Adiciona barra de rolagem vertical quando necessário */
+    margin-top: 28px;
+}
+
+#desktop h1 {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.title-bar {
+    background-color: #141414;
+    color: #fff;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    padding: 0 0 0 10px;
+    user-select: none;
+    position: relative;
+    z-index: 101;
+    text-align: left; /* Alinha o texto à esquerda */
+    justify-content: flex-end;
+}
+
+.title-bar .app-icon {
+    display: flex;
+    align-items: center;
+    width: 16px;
+}
+
+.title-bar .app-icon img {
+    width: 16px;
+    height: 16px;
+    margin-right: 5px;
+    flex-shrink: 0;
+}
+
+.title-bar .title {
+    font-size: 14px;
+    margin-left: 10px; /* Ajuste conforme necessário para espaçamento entre ícone e título */
+    width: 99%;
+    text-transform: uppercase;
+
+}
+
+.title-bar .controls {
+    display: flex;
+    gap: 5px;
+    
+}
+
+.title-bar .controls button {
+    background-color: transparent;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    font-size: 12px;
+    width: 30px;
+    height: 30px;
+    padding: 5px;
+}
+
+.title-bar .controls button:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.title-bar .controls .close-button:hover {
+    background-color: rgba(197, 2, 2, 0.959);
+}
+
+
+
+/* Estilos para a janela do aplicativo */
+.app-window {
+    position: absolute;
+    top: 10%; /* Ajuste conforme necessário */
+    left: 10%; /* Ajuste conforme necessário */
+    width: 80%; /* Largura inicial da janela */
+    min-height: 80%; /* Altura mínima da janela */
+    background-color: #fff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 100; /* Garante que a janela esteja acima do resto do conteúdo */
+    overflow: hidden; /* Esconde a barra de rolagem interna */
+}
+
+.app-window.maximized {
+    top: 28px; /* Altura da topbar */
+    left: 0;
+    width: 100%;
+    height: calc(100% - 28px); /* Desconta a altura da topbar */
+}
+
+.resizers {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+}
+
+.resizer {
+    width: 10px;
+    height: 10px;
+    position: absolute;
+    background: transparent;
+    z-index: 10;
+}
+
+.resizer.top-left {
+    top: -5px;
+    left: -5px;
+    cursor: nwse-resize;
+}
+
+.resizer.top-right {
+    top: -5px;
+    right: -5px;
+    cursor: nesw-resize;
+}
+
+.resizer.bottom-left {
+    bottom: -5px;
+    left: -5px;
+    cursor: nesw-resize;
+}
+
+.resizer.bottom-right {
+    bottom: -5px;
+    right: -5px;
+    cursor: nwse-resize;
+}
+
+.resizer.top {
+    top: -5px;
+    left: 50%;
+    width: 100%;
+    height: 10px;
+    cursor: ns-resize;
+    transform: translateX(-50%);
+}
+
+.resizer.right {
+    top: 50%;
+    right: -5px;
+    width: 10px;
+    height: 100%;
+    cursor: ew-resize;
+    transform: translateY(-50%);
+}
+
+.resizer.bottom {
+    bottom: -5px;
+    left: 50%;
+    width: 100%;
+    height: 10px;
+    cursor: ns-resize;
+    transform: translateX(-50%);
+}
+
+.resizer.left {
+    top: 50%;
+    left: -5px;
+    width: 10px;
+    height: 100%;
+    cursor: ew-resize;
+    transform: translateY(-50%);
+}
