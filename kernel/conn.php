@@ -1,4 +1,5 @@
 <?php
+$urlBase = "http://nbxos.test/";
 
 // Configurações do banco de dados
 $servername = "localhost";

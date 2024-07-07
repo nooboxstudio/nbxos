@@ -3,17 +3,9 @@ let openAppWindows = [];
 // Variável para rastrear o valor mais alto de z-index
 let highestZIndex = 1;
 
-// Função para verificar se o usuário está logado
-fetch('core/login/checkLogin.php')
-    .then(response => response.json())
-    .then(data => {
-        if (!data.loggedIn) {
-            window.location.href = 'login';
-        } else {
-            
-        }
-    })
-    .catch(error => console.error('Error:', error));
+// Após o PHP definir $_SESSION['user_id']
+let userId = localStorage.getItem('user_id');
+
 
 // Função para carregar a lista de aplicativos
 function loadAppList() {
@@ -49,7 +41,7 @@ function renderAppList(apps) {
 
         // Cria o ícone do aplicativo
         const icon = document.createElement('img');
-        icon.src = `apps/${app.appname}/${app.logo}`; // Concatena o caminho base com o caminho do logo
+        icon.src = `users/${userId}/apps/${app.appname}/${app.logo}`; // Concatena o caminho base com o caminho do logo
         icon.alt = app.appname;
         icon.classList.add('app-icon'); // Adicione uma classe se precisar de estilos específicos
 
@@ -75,7 +67,7 @@ function renderAppList(apps) {
 }
 
 // Função para abrir a janela do aplicativo
-function openAppWindow(app, path = `apps/${app.appname}`) {
+function openAppWindow(app, path = `users/${userId}/apps/${app.appname}`) {
     const desktop = document.getElementById('desktop');
 
     // Verifica se já existe uma instância do aplicativo aberta
@@ -99,7 +91,7 @@ function openAppWindow(app, path = `apps/${app.appname}`) {
 
     // Ícone do aplicativo
     const icon = document.createElement('img');
-    icon.src = `apps/${app.appname}/${app.logo}`; // Caminho para o ícone do aplicativo
+    icon.src = `users/${userId}/apps/${app.appname}/${app.logo}`; // Caminho para o ícone do aplicativo
     icon.alt = app.appname;
     icon.classList.add('app-icon'); // Adicione uma classe se precisar de estilos específicos
     titleBar.appendChild(icon);
@@ -324,142 +316,6 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
-
-// Função para abrir a janela do perfil
-function openShutdownWindow() {
-    const desktop = document.getElementById('desktop');
-
-    // Verifica se já existe uma instância da janela do perfil aberta
-    let existingWindow = openAppWindows.find(win => win.appname === 'Shutdown');
-    if (existingWindow) {
-        if (existingWindow.minimized) {
-            restoreApp(existingWindow.window);
-        }
-        return;
-    }
-
-    // Cria uma nova janela na área de desktop para o perfil
-    const shutdownWindow = document.createElement('div');
-    shutdownWindow.classList.add('app-window');
-    shutdownWindow.setAttribute('data-appname', 'Shutdown'); // Adiciona um atributo para identificação
-    shutdownWindow.style.zIndex = highestZIndex++; // Define o z-index e incrementa a variável
-
-    // Cria a barra de título da janela do perfil
-    const titleBar = document.createElement('div');
-    titleBar.classList.add('title-bar');
-
-    // Ícone do perfil
-    const icon = document.createElement('img');
-    icon.src = 'core/systemapps/shutdown/img/icon.png'; // Caminho para o ícone do perfil
-    icon.alt = 'Shutdown';
-    icon.classList.add('app-icon'); // Adicione uma classe se precisar de estilos específicos
-    titleBar.appendChild(icon);
-
-    // Título da janela do perfil
-    const title = document.createElement('span');
-    title.textContent = 'Shutdown';
-    title.classList.add('title');
-    titleBar.appendChild(title);
-
-    // Botões de controle (minimizar, maximizar, fechar)
-    const controls = document.createElement('div');
-    controls.classList.add('controls');
-
-    
-
-    // Botão Fechar
-    const closeButton = document.createElement('button');
-    closeButton.textContent = 'X';
-    closeButton.classList.add('close-button');
-    closeButton.addEventListener('click', () => {
-        closeApp(shutdownWindow, { appname: 'Shutdown' }); // Passe um objeto simulado para corresponder à estrutura esperada
-    });
-    controls.appendChild(closeButton);
-
-    titleBar.appendChild(controls);
-    shutdownWindow.appendChild(titleBar);
-
-    // Conteúdo da janela do perfil (iframe, formulário, etc.)
-    const shutdownContent = document.createElement('iframe');
-    shutdownContent.src = 'core/systemapps/shutdown'; // URL da index do perfil
-    shutdownContent.width = '100%';
-    shutdownContent.height = 'calc(100% - 30px)'; // Ajuste conforme a altura da barra de título
-    shutdownWindow.appendChild(shutdownContent);
-
-
-    // Adiciona a janela do perfil à área de desktop
-    desktop.appendChild(shutdownWindow);
-
-    // Redimensionamento da janela do perfil (opcional)
-    makeResizable(shutdownWindow);
-
-    // Movimentação da janela do perfil
-    makeDraggable(shutdownWindow, titleBar);
-
-    // Adiciona a referência da janela do perfil aberta ao array
-    openAppWindows.push({
-        appname: 'Shutdown',
-        window: shutdownWindow,
-        minimized: false,
-        maximized: true,
-        previousSize: null
-    });
-
-    // Adiciona o ícone na barra de tarefas (opcional para o perfil)
-    addTaskbarIcon('Shutdown', 'core/systemapps/shutdown/img/icon.png');
-
-    // Atualiza o user.json com as janelas abertas (opcional)
-    updateOpenWindowsInJson();
-
-    // Adiciona evento para trazer a janela do perfil para frente ao clicar nela
-    shutdownWindow.addEventListener('mousedown', () => {
-        bringToFront(shutdownWindow);
-    });
-}
-
-// Inicialização: Adicione o listener para abrir a janela do perfil ao carregar o DOM
-document.addEventListener('DOMContentLoaded', () => {
-    const shutdownDiv = document.getElementById('shutdown');
-    if (shutdownDiv) {
-        shutdownDiv.addEventListener('click', (event) => {
-            event.preventDefault();
-            openShutdownWindow();
-        });
-    }
-});
-
-
-// Função para atualizar o user.json com as janelas abertas
-function updateOpenWindowsInJson() {
-    const openWindows = openAppWindows.map(win => ({
-        appname: win.appname,
-        minimized: win.minimized,
-        maximized: win.maximized,
-        position: {
-            top: win.window.style.top,
-            left: win.window.style.left,
-            width: win.window.style.width,
-            height: win.window.style.height
-        }
-    }));
-
-    fetch('core/user/updateWindows.php', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(openWindows)
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log('User.json updated successfully:', data);
-    })
-    .catch(error => {
-        console.error('Error updating user.json:', error);
-    });
-}
-
-// Função para adicionar ícone do aplicativo na barra de tarefas
 // Função para adicionar ícone do aplicativo na barra de tarefas
 function addTaskbarIcon(appname, iconSrc) {
     const taskbarApps = document.getElementById('taskbar-apps');

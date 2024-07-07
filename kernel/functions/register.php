@@ -25,13 +25,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $sql = "INSERT INTO tb_users (username, email, password) VALUES ('$username', '$email', '$password')";
 
         if ($conn->query($sql) === TRUE) {
+            // Obter o ID do novo usuário
+            $user_id = $conn->insert_id;
+
+            // Criar uma pasta com o ID do usuário
+            $user_directory = "../../users/" . $user_id;
+            if (!file_exists($user_directory)) {
+                mkdir($user_directory, 0777, true);
+            }
             $_SESSION['message'] = 'Registrado com sucesso!';
+            header("Location: ../../login");
+            $conn->close();
+
+    exit();
         } else {
+
             $_SESSION['message'] = 'Erro ao registrar. Por favor, tente novamente.';
+            header("Location: ../../register");
+            $conn->close();
+
+    exit();
         }
     }
-    $conn->close();
-    header("Location: ../../register");
-    exit();
+    
 }
 ?>

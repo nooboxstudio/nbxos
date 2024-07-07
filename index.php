@@ -1,7 +1,14 @@
 <?php
 include_once('kernel/conn.php');
 include_once('kernel/functions.php');
-session_start();
+
+
+// Verifica se a sessão não está ativa antes de iniciar
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
+
 
 // Verificar se o usuário está logado
 if (!isset($_SESSION['email'])) {
@@ -9,6 +16,13 @@ if (!isset($_SESSION['email'])) {
     header("Location: login");
     exit();
 }
+
+
+$user_id = $_SESSION['user_id'];
+echo "<script>";
+echo "localStorage.setItem('user_id', '" . $user_id . "');";
+echo "</script>";
+
 ?>
 
 <!DOCTYPE html>
@@ -49,8 +63,8 @@ if (!isset($_SESSION['email'])) {
         </ul>
         </div>
         <div id="menu-content-fixed">
-            <div id="profile"><a><?php echo $user_name; ?></a></div>
-            <div id="shutdown" class="shutdown"><img src="core/assets/img/power.png" width="20"></div>
+            <div id="profile" style="cursor: pointer;"><?php echo $user_name; ?></div>
+            <div id="shutdown" class="shutdown"><a href="shutdown"><img src="core/assets/img/power.png" width="20"></a></div>
         </div>
     </div>
     <ul id="context-menu" class="context-menu">

@@ -18,7 +18,7 @@ $mail = $_SESSION['email'];
 
 // Consulta SQL para selecionar apenas as colunas 'email' e 'nome'
 // Envolver o valor do email com aspas simples
-$selectuser = "SELECT email, username FROM tb_users WHERE email = '$mail'";
+$selectuser = "SELECT * FROM tb_users WHERE email = '$mail'";
 $resultuser = $conn->query($selectuser);
 
 // Verificar se há resultados e processar os dados
@@ -26,11 +26,10 @@ if ($resultuser->num_rows > 0) {
     while ($user = $resultuser->fetch_assoc()) {
         $user_mail = $user['email'];
         $user_name = $user['username'];
+        $user_id= $user['user_id'];
     }
 } else {
     echo "Nenhum usuário encontrado.";
 }
 
-// Fechar a conexão (se necessário)
-$conn->close();
 ?>
