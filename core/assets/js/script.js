@@ -10,7 +10,7 @@ fetch('core/login/checkLogin.php')
         if (!data.loggedIn) {
             window.location.href = 'login';
         } else {
-            document.getElementById('menutop').innerHTML += `<span>${data.pcname}</span>`;
+            
         }
     })
     .catch(error => console.error('Error:', error));
@@ -37,7 +37,7 @@ async function fetchAppList() {
 
 // Função para renderizar a lista de aplicativos na interface
 function renderAppList(apps) {
-    const menuContent = document.getElementById('menu-content');
+    const menuContent = document.getElementById('menu-content-list');
     const ul = document.createElement('ul');
 
     // Ordena os aplicativos por nome
@@ -184,27 +184,250 @@ function openAppWindow(app, path = `apps/${app.appname}`) {
     });
 }
 
+// Função para trazer a janela para frente
+function bringToFront(appWindow) {
+    appWindow.style.zIndex = highestZIndex++;
+}
+
+// Função para minimizar o aplicativo
+function minimizeApp(appWindow) {
+    const appInfo = openAppWindows.find(app => app.window === appWindow);
+
+    if (appInfo) {
+        appWindow.style.display = 'none';
+        appInfo.minimized = true; // Marca como minimizado
+    }
+}
+
 
 // Função para trazer a janela para frente
 function bringToFront(appWindow) {
     appWindow.style.zIndex = highestZIndex++;
 }
 
-//abre a janela de perfil
-document.addEventListener('DOMContentLoaded', function() {
-    // Verifica se a div#profile existe antes de adicionar o event listener
-    const profileDiv = document.getElementById('profile');
-    if (profileDiv) {
-        profileDiv.addEventListener('click', function(event) {
-            event.preventDefault();
-            // Cria um objeto app fictício para representar a janela do perfil
-            const profileApp = { appname: 'Profile' };
-            openAppWindow(profileApp, 'core/systemapps/profile/');
-        });
+// Função para abrir a janela do perfil
+function openProfileWindow() {
+    const desktop = document.getElementById('desktop');
+
+    // Verifica se já existe uma instância da janela do perfil aberta
+    let existingWindow = openAppWindows.find(win => win.appname === 'Profile');
+    if (existingWindow) {
+        if (existingWindow.minimized) {
+            restoreApp(existingWindow.window);
+        }
+        return;
     }
 
-    loadAppList(); // Carrega a lista de aplicativos ao iniciar
+    // Cria uma nova janela na área de desktop para o perfil
+    const profileWindow = document.createElement('div');
+    profileWindow.classList.add('app-window');
+    profileWindow.setAttribute('data-appname', 'Profile'); // Adiciona um atributo para identificação
+    profileWindow.style.zIndex = highestZIndex++; // Define o z-index e incrementa a variável
+
+    // Cria a barra de título da janela do perfil
+    const titleBar = document.createElement('div');
+    titleBar.classList.add('title-bar');
+
+    // Ícone do perfil
+    const icon = document.createElement('img');
+    icon.src = 'core/systemapps/profile/img/icon.png'; // Caminho para o ícone do perfil
+    icon.alt = 'Profile';
+    icon.classList.add('app-icon'); // Adicione uma classe se precisar de estilos específicos
+    titleBar.appendChild(icon);
+
+    // Título da janela do perfil
+    const title = document.createElement('span');
+    title.textContent = 'Profile';
+    title.classList.add('title');
+    titleBar.appendChild(title);
+
+    // Botões de controle (minimizar, maximizar, fechar)
+    const controls = document.createElement('div');
+    controls.classList.add('controls');
+
+    // Botão Minimizar (opcional para o perfil)
+    const minimizeButton = document.createElement('button');
+    minimizeButton.textContent = '_';
+    minimizeButton.classList.add('minimize-button');
+    minimizeButton.addEventListener('click', () => {
+        minimizeApp(profileWindow);
+    });
+    controls.appendChild(minimizeButton);
+
+    // Botão Maximizar (opcional para o perfil)
+    const maximizeButton = document.createElement('button');
+    maximizeButton.textContent = '+';
+    maximizeButton.classList.add('maximize-button');
+    maximizeButton.addEventListener('click', () => {
+        maximizeApp(profileWindow);
+    });
+    controls.appendChild(maximizeButton);
+
+    // Botão Fechar
+    const closeButton = document.createElement('button');
+    closeButton.textContent = 'X';
+    closeButton.classList.add('close-button');
+    closeButton.addEventListener('click', () => {
+        closeApp(profileWindow, { appname: 'Profile' }); // Passe um objeto simulado para corresponder à estrutura esperada
+    });
+    controls.appendChild(closeButton);
+
+    titleBar.appendChild(controls);
+    profileWindow.appendChild(titleBar);
+
+    // Conteúdo da janela do perfil (iframe, formulário, etc.)
+    const profileContent = document.createElement('iframe');
+    profileContent.src = 'core/systemapps/profile'; // URL da index do perfil
+    profileContent.style.width = '100%';
+    profileContent.style.height = 'calc(100% - 30px)'; // Ajuste conforme a altura da barra de título
+    profileWindow.appendChild(profileContent);
+
+    // Adiciona a janela do perfil à área de desktop
+    desktop.appendChild(profileWindow);
+
+    // Redimensionamento da janela do perfil (opcional)
+    makeResizable(profileWindow);
+
+    // Movimentação da janela do perfil
+    makeDraggable(profileWindow, titleBar);
+
+    // Adiciona a referência da janela do perfil aberta ao array
+    openAppWindows.push({
+        appname: 'Profile',
+        window: profileWindow,
+        minimized: false,
+        maximized: false,
+        previousSize: null
+    });
+
+    // Adiciona o ícone na barra de tarefas (opcional para o perfil)
+    addTaskbarIcon('Profile', 'core/systemapps/profile/img/icon.png');
+
+    // Atualiza o user.json com as janelas abertas (opcional)
+    updateOpenWindowsInJson();
+
+    // Adiciona evento para trazer a janela do perfil para frente ao clicar nela
+    profileWindow.addEventListener('mousedown', () => {
+        bringToFront(profileWindow);
+    });
+}
+
+// Inicialização: Adicione o listener para abrir a janela do perfil ao carregar o DOM
+document.addEventListener('DOMContentLoaded', () => {
+    const profileDiv = document.getElementById('profile');
+    if (profileDiv) {
+        profileDiv.addEventListener('click', (event) => {
+            event.preventDefault();
+            openProfileWindow();
+        });
+    }
 });
+
+
+
+// Função para abrir a janela do perfil
+function openShutdownWindow() {
+    const desktop = document.getElementById('desktop');
+
+    // Verifica se já existe uma instância da janela do perfil aberta
+    let existingWindow = openAppWindows.find(win => win.appname === 'Shutdown');
+    if (existingWindow) {
+        if (existingWindow.minimized) {
+            restoreApp(existingWindow.window);
+        }
+        return;
+    }
+
+    // Cria uma nova janela na área de desktop para o perfil
+    const shutdownWindow = document.createElement('div');
+    shutdownWindow.classList.add('app-window');
+    shutdownWindow.setAttribute('data-appname', 'Shutdown'); // Adiciona um atributo para identificação
+    shutdownWindow.style.zIndex = highestZIndex++; // Define o z-index e incrementa a variável
+
+    // Cria a barra de título da janela do perfil
+    const titleBar = document.createElement('div');
+    titleBar.classList.add('title-bar');
+
+    // Ícone do perfil
+    const icon = document.createElement('img');
+    icon.src = 'core/systemapps/shutdown/img/icon.png'; // Caminho para o ícone do perfil
+    icon.alt = 'Shutdown';
+    icon.classList.add('app-icon'); // Adicione uma classe se precisar de estilos específicos
+    titleBar.appendChild(icon);
+
+    // Título da janela do perfil
+    const title = document.createElement('span');
+    title.textContent = 'Shutdown';
+    title.classList.add('title');
+    titleBar.appendChild(title);
+
+    // Botões de controle (minimizar, maximizar, fechar)
+    const controls = document.createElement('div');
+    controls.classList.add('controls');
+
+    
+
+    // Botão Fechar
+    const closeButton = document.createElement('button');
+    closeButton.textContent = 'X';
+    closeButton.classList.add('close-button');
+    closeButton.addEventListener('click', () => {
+        closeApp(shutdownWindow, { appname: 'Shutdown' }); // Passe um objeto simulado para corresponder à estrutura esperada
+    });
+    controls.appendChild(closeButton);
+
+    titleBar.appendChild(controls);
+    shutdownWindow.appendChild(titleBar);
+
+    // Conteúdo da janela do perfil (iframe, formulário, etc.)
+    const shutdownContent = document.createElement('iframe');
+    shutdownContent.src = 'core/systemapps/shutdown'; // URL da index do perfil
+    shutdownContent.width = '100%';
+    shutdownContent.height = 'calc(100% - 30px)'; // Ajuste conforme a altura da barra de título
+    shutdownWindow.appendChild(shutdownContent);
+
+
+    // Adiciona a janela do perfil à área de desktop
+    desktop.appendChild(shutdownWindow);
+
+    // Redimensionamento da janela do perfil (opcional)
+    makeResizable(shutdownWindow);
+
+    // Movimentação da janela do perfil
+    makeDraggable(shutdownWindow, titleBar);
+
+    // Adiciona a referência da janela do perfil aberta ao array
+    openAppWindows.push({
+        appname: 'Shutdown',
+        window: shutdownWindow,
+        minimized: false,
+        maximized: true,
+        previousSize: null
+    });
+
+    // Adiciona o ícone na barra de tarefas (opcional para o perfil)
+    addTaskbarIcon('Shutdown', 'core/systemapps/shutdown/img/icon.png');
+
+    // Atualiza o user.json com as janelas abertas (opcional)
+    updateOpenWindowsInJson();
+
+    // Adiciona evento para trazer a janela do perfil para frente ao clicar nela
+    shutdownWindow.addEventListener('mousedown', () => {
+        bringToFront(shutdownWindow);
+    });
+}
+
+// Inicialização: Adicione o listener para abrir a janela do perfil ao carregar o DOM
+document.addEventListener('DOMContentLoaded', () => {
+    const shutdownDiv = document.getElementById('shutdown');
+    if (shutdownDiv) {
+        shutdownDiv.addEventListener('click', (event) => {
+            event.preventDefault();
+            openShutdownWindow();
+        });
+    }
+});
+
 
 // Função para atualizar o user.json com as janelas abertas
 function updateOpenWindowsInJson() {
@@ -591,3 +814,46 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+
+
+/*
+###################################################################
+### Menu de Contexto (right-click no desktop)
+###################################################################
+*/
+
+document.addEventListener("DOMContentLoaded", function() {
+    const desktop = document.getElementById('desktop');
+    const contextMenu = document.getElementById('context-menu');
+
+    desktop.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+        contextMenu.style.top = `${e.clientY}px`;
+        contextMenu.style.left = `${e.clientX}px`;
+        contextMenu.style.display = 'block';
+    });
+
+    document.addEventListener('click', function(e) {
+        if (!contextMenu.contains(e.target)) {
+            contextMenu.style.display = 'none';
+        }
+    });
+
+    // Add event listeners to menu items recursively
+    function addEventListeners(menu) {
+        Array.prototype.forEach.call(menu.children, function(item) {
+            if (item.tagName === 'LI') {
+                item.addEventListener('click', function() {
+                    alert(`Opção ${item.textContent} selecionada`);
+                    contextMenu.style.display = 'none';
+                });
+                if (item.querySelector('.submenu')) {
+                    addEventListeners(item.querySelector('.submenu'));
+                }
+            }
+        });
+    }
+
+    addEventListeners(contextMenu);
+});
+

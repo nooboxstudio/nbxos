@@ -1,5 +1,18 @@
+<?php
+include_once('kernel/conn.php');
+include_once('kernel/functions.php');
+session_start();
+
+// Verificar se o usuário está logado
+if (!isset($_SESSION['email'])) {
+    // Se não estiver logado, redirecionar para a página de login
+    header("Location: login");
+    exit();
+}
+?>
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt">
 <head>
     <meta charset="UTF-8">
     <title>DESKTOP | NBX OS</title>
@@ -12,16 +25,6 @@
             background-repeat: no-repeat;
             background-size: cover;
         ">
-    <div id="topbar">
-        <div id="menutop"></div>
-        <div id="menutopcontent" class="menutopcontent">
-        <!-- Conteúdo do menu aqui -->
-            <ul>
-                <li id="profile" class="user"><a>Profile</a></li>
-                <li class="logout"><a href="core/login/logout.php">Logout</a></li>
-            </ul>
-        </div>
-    </div>
     <div id="taskbar">
         <div id="menu"></div>
         <div id="taskbar-apps"></div>
@@ -43,14 +46,29 @@
     <div id="menu-content">
         <div id="menu-content-list">
         <ul>
-            <li>teste</li>
         </ul>
         </div>
         <div id="menu-content-fixed">
-            
+            <div id="profile"><a><?php echo $user_name; ?></a></div>
+            <div id="shutdown" class="shutdown"><img src="core/assets/img/power.png" width="20"></div>
         </div>
     </div>
-    
+    <ul id="context-menu" class="context-menu">
+        <li id="option1">Opção 1</li>
+        <li id="option2">Opção 2 <span>></span>
+            <ul class="submenu">
+                <li>Sub-opção 2</li>
+                <li>Sub-opção 1 <span>></span>
+                    <ul class="submenu">
+                        <li>Sub-opção 1</li>
+                        <li>Sub-opção 2</li>
+                    </ul>
+                </li>
+                
+            </ul>
+        </li>
+        <li id="option3">Opção 3</li>
+    </ul>
 
     <script src="core/assets/js/script.js"></script>
 </body>

@@ -1,3 +1,47 @@
+<?php
+// Incluir a conexão com o banco de dados
+include('kernel/conn.php');
+
+// Configurar o tempo de vida da sessão para 8 horas (em segundos)
+$session_lifetime = 8 * 60 * 60; // 8 horas
+session_set_cookie_params($session_lifetime);
+
+// Início da sessão após configurar o cookie
+session_start();
+
+// Verificar se o usuário já está logado
+if (isset($_SESSION['email'])) {
+    // Se estiver logado, redirecionar para a página inicial
+    header("Location: ./");
+    exit();
+}
+
+// Processar o formulário de login se o método for POST
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    // Obter dados do formulário
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+
+    // Consulta SQL para verificar as credenciais
+    $sql = "SELECT * FROM tb_users WHERE email='$email' AND password='$password'";
+    $result = $conn->query($sql);
+
+    // Verificar se o usuário foi encontrado
+    if ($result->num_rows > 0) {
+        $users = $result->fetch_assoc();
+        // Iniciar a sessão e armazenar o nome de usuário na variável de sessão
+        $_SESSION['email'] = $email;
+        $_SESSION['user_id'] = $users['user_id'];
+
+        // Redirecionar para a página inicial
+        header("Location: ./");
+        exit();
+    } else {
+        echo "Credenciais inválidas. Tente novamente.";
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,15 +59,15 @@
     </div>
 
     <div id="loginWindow">
-        <form id="loginForm">
+        <form id="loginForm" method="post" action="login">
             <div id="row">
                 <span class="form-logo">NBX OS</span>
             </div>
             <div id="row">
-                <input type="text" name="pcname" placeholder="PC Name" required>
+                <input type="text" name="email" placeholder="E-mail" required>
             </div>
             <div id="row">
-                <input type="password" name="pass" placeholder="Password" required>
+                <input type="password" name="password" placeholder="Password" required>
             </div>
             <div id="row">
                 <button type="submit" class="btn-login">Login</button>
@@ -31,49 +75,5 @@
         </form>
         <div id="row" class="register-span">Não possui uma conta? <a href="register" class="purple">Registre-se!</a></div>
     </div>
-
-    <script>
-        // Processa o login
-        document.getElementById('loginForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const formData = new FormData(event.target);
-            const data = Object.fromEntries(formData);
-
-            fetch('core/login/login.php', {
-                method: 'POST',
-                body: JSON.stringify(data),
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            }).then(response => response.json())
-              .then(data => {
-                  if (data.success) {
-                      window.location.href = './';
-                  } else {
-                      displayError(data.message);
-                  }
-              }).catch(error => console.error('Error:', error));
-        });
-
-        // Função para exibir o alerta de erro
-        function displayError(message) {
-            const alertError = document.getElementById('alertError');
-            const alertText = document.getElementById('alertText');
-            alertText.textContent = `Error: ${message}`;
-            alertError.style.display = 'block';
-
-            // Evento para fechar o alerta ao clicar fora dele
-            document.addEventListener('click', function(event) {
-                if (!alertError.contains(event.target)) {
-                    alertError.style.display = 'none';
-                }
-            });
-        }
-
-        // Função para fechar o alerta
-        function closeAlert() {
-            document.getElementById('alertError').style.display = 'none';
-        }
-    </script>
 </body>
 </html>
