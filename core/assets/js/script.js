@@ -6,68 +6,76 @@ let highestZIndex = 1;
 // Após o PHP definir $_SESSION['user_id']
 let userId = localStorage.getItem('user_id');
 
+/*#################################################
+# Função para abrir o menu
+##################################################*/
+// Função para manipular abertura e fechamento de menus
+function setupMenu(menuToggleId, menuContentId) {
+    const menuToggle = document.getElementById(menuToggleId);
+    const menuContent = document.getElementById(menuContentId);
 
-// Função para carregar a lista de aplicativos
-function loadAppList() {
-    fetchAppList()
-        .then(apps => {
-            renderAppList(apps);
-        })
-        .catch(error => {
-            console.error('Error fetching app list:', error);
-        });
-}
+    // Inicialmente esconda o menuContent
+    menuContent.style.display = 'none';
 
-// Função para buscar a lista de aplicativos
-async function fetchAppList() {
-    const response = await fetch('core/startup/listApps.php');
-    if (!response.ok) {
-        throw new Error('Failed to fetch app list');
+    // Função para fechar o menu
+    function closeMenu() {
+        menuContent.classList.remove('show');
+        setTimeout(function() {
+            menuContent.style.display = 'none';
+        }, 300); // Tempo correspondente ao valor do transition
     }
-    return await response.json();
-}
 
-// Função para renderizar a lista de aplicativos na interface
-function renderAppList(apps) {
-    const menuContent = document.getElementById('menu-content-list');
-    const ul = document.createElement('ul');
-
-    // Ordena os aplicativos por nome
-    apps.sort((a, b) => a.appname.localeCompare(b.appname));
-
-    // Cria elementos de lista para cada aplicativo
-    apps.forEach((app, index) => {
-        const li = document.createElement('li');
-
-        // Cria o ícone do aplicativo
-        const icon = document.createElement('img');
-        icon.src = `users/${userId}/apps/${app.appname}/${app.logo}`; // Concatena o caminho base com o caminho do logo
-        icon.alt = app.appname;
-        icon.classList.add('app-icon'); // Adicione uma classe se precisar de estilos específicos
-
-        // Cria o link para abrir o aplicativo
-        const a = document.createElement('a');
-        a.href = '#'; // Pode definir o link para o aplicativo se necessário
-        a.textContent = `${app.appname}`;
-        a.addEventListener('click', (event) => {
-            event.preventDefault();
-            openAppWindow(app);
-            menuContent.classList.remove('show'); // Fecha o menu ao abrir o aplicativo
-        });
-
-        // Adiciona o ícone e o nome do aplicativo ao li
-        li.appendChild(icon);
-        li.appendChild(a);
-        ul.appendChild(li);
+    // Abrir/fechar menu ao clicar no ícone de menu
+    menuToggle.addEventListener('click', function(event) {
+        event.stopPropagation(); // Impede que o evento se propague para o documento
+        if (menuContent.style.display === 'none' || menuContent.style.display === '') {
+            menuContent.style.display = 'block';
+            setTimeout(function() {
+                menuContent.classList.add('show');
+            }, 10); // Pequeno delay para garantir a transição
+        } else {
+            closeMenu(); // Fecha o menu ao clicar novamente no ícone de menu
+        }
     });
 
-    // Limpa o conteúdo atual e adiciona a nova lista de aplicativos
-    menuContent.innerHTML = ''; // Limpa o conteúdo anterior
-    menuContent.appendChild(ul); // Adiciona a nova lista de aplicativos
+    // Fechar menu ao clicar fora dele
+    document.addEventListener('click', function(event) {
+        var target = event.target;
+        if (target !== menuToggle && !menuToggle.contains(target) && target !== menuContent && !menuContent.contains(target)) {
+            closeMenu(); // Fecha o menu se o clique não foi dentro do menu ou no ícone de menu
+        }
+    });
 }
 
-// Função para abrir a janela do aplicativo
-function openAppWindow(app, path = `users/${userId}/apps/${app.appname}`) {
+// Inicialização dos menus
+document.addEventListener('DOMContentLoaded', function() {
+    setupMenu('menu', 'menu-content'); // Menu principal
+});
+
+
+/*#################################################
+# Função para abrir uma nova janela via link
+##################################################*/
+
+function openAppWindowFromLink(link) {
+    // Extrai o caminho base do aplicativo do atributo href do link
+    const appPath = link.getAttribute('href');
+
+    // Constrói o caminho completo para o manifesto JSON
+    const jsonPath = `${appPath}/manifest.json`;
+    
+    // Realiza uma requisição AJAX para carregar o manifesto do aplicativo
+    fetch(jsonPath)
+        .then(response => response.json())
+        .then(app => {
+            openAppWindow(app, appPath); // Passa appPath como o caminho base do aplicativo
+            
+        })
+        .catch(error => console.error('Erro ao carregar o manifesto do aplicativo:', error));
+        
+}
+
+function openAppWindow(app, appPath) {
     const desktop = document.getElementById('desktop');
 
     // Verifica se já existe uma instância do aplicativo aberta
@@ -78,7 +86,7 @@ function openAppWindow(app, path = `users/${userId}/apps/${app.appname}`) {
         }
         return;
     }
-
+    
     // Cria uma nova janela na área de desktop
     const appWindow = document.createElement('div');
     appWindow.classList.add('app-window');
@@ -91,7 +99,7 @@ function openAppWindow(app, path = `users/${userId}/apps/${app.appname}`) {
 
     // Ícone do aplicativo
     const icon = document.createElement('img');
-    icon.src = `users/${userId}/apps/${app.appname}/${app.logo}`; // Caminho para o ícone do aplicativo
+    icon.src = `${appPath}/${app.logo}`; // Caminho para o ícone do aplicativo dentro do caminho base
     icon.alt = app.appname;
     icon.classList.add('app-icon'); // Adicione uma classe se precisar de estilos específicos
     titleBar.appendChild(icon);
@@ -138,23 +146,23 @@ function openAppWindow(app, path = `users/${userId}/apps/${app.appname}`) {
 
     // Define o conteúdo da janela do aplicativo
     const appContent = document.createElement('iframe');
-    appContent.src = path; // Caminho personalizado para o aplicativo
+    appContent.src = `${appPath}/${app.appindex}`; // Usando o caminho do manifesto para carregar o conteúdo inicial
     appContent.width = '100%';
     appContent.height = 'calc(100% - 30px)'; // Ajusta a altura descontando a altura da barra de título
     appContent.style.border = 'none';
 
     // Adiciona o conteúdo do aplicativo à janela
     appWindow.appendChild(appContent);
-
+    
     // Adiciona a janela à área de desktop
     desktop.appendChild(appWindow);
-
+    
     // Redimensionamento da janela
     makeResizable(appWindow);
-
+    
     // Movimentação da janela
     makeDraggable(appWindow, titleBar);
-
+    
     // Adiciona a referência da janela aberta ao array
     openAppWindows.push({
         appname: app.appname,
@@ -165,19 +173,28 @@ function openAppWindow(app, path = `users/${userId}/apps/${app.appname}`) {
     });
 
     // Adiciona o ícone na barra de tarefas
-    addTaskbarIcon(app.appname, `apps/${app.appname}/${app.logo}`);
-
+    addTaskbarIcon(app.appname, `${appPath}/${app.logo}`);
 
     // Adiciona evento para trazer a janela para frente ao clicar nela
     appWindow.addEventListener('mousedown', () => {
         bringToFront(appWindow);
     });
+    closeMenu();
 }
+
+/*#############################################################################
+# Função para trazer a janela para frente ao trocar de janela
+##############################################################################*/
 
 // Função para trazer a janela para frente
 function bringToFront(appWindow) {
     appWindow.style.zIndex = highestZIndex++;
 }
+
+/*#############################################################################
+# Função para minimizar o app na barra de tarefas
+##############################################################################*/
+
 
 // Função para minimizar o aplicativo
 function minimizeApp(appWindow) {
@@ -190,10 +207,7 @@ function minimizeApp(appWindow) {
 }
 
 
-// Função para trazer a janela para frente
-function bringToFront(appWindow) {
-    appWindow.style.zIndex = highestZIndex++;
-}
+
 
 // Função para abrir a janela do perfil
 function openProfileWindow() {
@@ -591,47 +605,9 @@ document.addEventListener('DOMContentLoaded', function() {
     loadAppList(); // Carrega a lista de aplicativos ao iniciar
 });
 
-// Função para manipular abertura e fechamento de menus
-function setupMenu(menuToggleId, menuContentId) {
-    const menuToggle = document.getElementById(menuToggleId);
-    const menuContent = document.getElementById(menuContentId);
 
-    // Inicialmente esconda o menuContent
-    menuContent.style.display = 'none';
 
-    // Abrir/fechar menu ao clicar no ícone de menu
-    menuToggle.addEventListener('click', function(event) {
-        event.stopPropagation(); // Impede que o evento se propague para o documento
-        if (menuContent.style.display === 'none' || menuContent.style.display === '') {
-            menuContent.style.display = 'block';
-            setTimeout(function() {
-                menuContent.classList.add('show');
-            }, 10); // Pequeno delay para garantir a transição
-        } else {
-            menuContent.classList.remove('show');
-            setTimeout(function() {
-                menuContent.style.display = 'none';
-            }, 300); // Tempo correspondente ao valor do transition
-        }
-    });
 
-    // Fechar menu ao clicar fora dele
-    document.addEventListener('click', function(event) {
-        var target = event.target;
-        if (target !== menuToggle && !menuToggle.contains(target) && target !== menuContent && !menuContent.contains(target)) {
-            menuContent.classList.remove('show');
-            setTimeout(function() {
-                menuContent.style.display = 'none';
-            }, 300); // Tempo correspondente ao valor do transition
-        }
-    });
-}
-
-// Inicialização dos menus
-document.addEventListener('DOMContentLoaded', function() {
-    setupMenu('menu', 'menu-content'); // Menu principal
-    setupMenu('menutop', 'menutopcontent'); // Menu superior
-});
 
 // Função para manipular abertura e fechamento do centro de notificações
 document.addEventListener('DOMContentLoaded', function() {

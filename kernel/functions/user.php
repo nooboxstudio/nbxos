@@ -16,20 +16,23 @@ if (!isset($_SESSION['email'])) {
 // Obter o email do usuário da sessão
 $mail = $_SESSION['email'];
 
-// Consulta SQL para selecionar apenas as colunas 'email' e 'nome'
-// Envolver o valor do email com aspas simples
-$selectuser = "SELECT * FROM tb_users WHERE email = '$mail'";
-$resultuser = $conn->query($selectuser);
+// Consulta SQL para selecionar apenas as colunas 'email' e 'username'
+$selectuser = "SELECT * FROM tb_users WHERE email = :email";
+$stmt = $db->prepare($selectuser);
 
-// Verificar se há resultados e processar os dados
-if ($resultuser->num_rows > 0) {
-    while ($user = $resultuser->fetch_assoc()) {
+if ($stmt) {
+    $stmt->bindValue(':email', $mail, SQLITE3_TEXT);
+    $resultuser = $stmt->execute();
+
+    // Verificar se há resultados e processar os dados
+    if ($user = $resultuser->fetchArray(SQLITE3_ASSOC)) {
         $user_mail = $user['email'];
         $user_name = $user['username'];
-        $user_id= $user['user_id'];
+        $user_id = $user['user_id'];
+    } else {
+        echo "Nenhum usuário encontrado.";
     }
 } else {
-    echo "Nenhum usuário encontrado.";
+    echo "Erro ao preparar a consulta.";
 }
-
 ?>

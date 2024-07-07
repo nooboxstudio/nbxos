@@ -58,11 +58,10 @@ echo "</script>";
     </div>
     <div id="menu-content">
         <div id="menu-content-list">
-        <ul>
-        </ul>
+        <ul><?php echo listUserApps(); ?></ul>
         </div>
         <div id="menu-content-fixed">
-            <div id="profile" style="cursor: pointer;"><?php echo $user_name; ?></div>
+            <div id="profile" style="cursor: pointer;"><?php echo $user_name; ?> | <?php echo $user_id?></div>
             <div id="settings" class="shutdown" style="cursor: pointer;"><img src="core/assets/img/settings.png" width="20"></div>
             <div id="appstore" class="shutdown" style="cursor: pointer;"><img src="core/assets/img/appstore.png" width="20"></div>
             <div id="shutdown" class="shutdown" style="cursor: pointer;"><a href="shutdown"><img src="core/assets/img/power.png" width="20"></a></div>

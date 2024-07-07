@@ -1,5 +1,5 @@
 <?php
-// Incluir a conexão com o banco de dados
+// Incluir a conexão com o banco de dados SQLite
 include('kernel/conn.php');
 
 // Configurar o tempo de vida da sessão para 8 horas (em segundos)
@@ -23,28 +23,39 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $password = $_POST['password'];
 
     // Consulta SQL para obter a senha criptografada do usuário
-    $sql = "SELECT * FROM tb_users WHERE email='$email'";
-    $result = $conn->query($sql);
+    $sql = "SELECT * FROM tb_users WHERE email=:email";
+    $stmt = $db->prepare($sql);
 
-    // Verificar se o usuário foi encontrado
-    if ($result->num_rows > 0) {
-        $user = $result->fetch_assoc();
-        // Verificar a senha usando password_verify
-        if (password_verify($password, $user['password'])) {
-            // Iniciar a sessão e armazenar o nome de usuário na variável de sessão
-            $_SESSION['email'] = $email;
-            $_SESSION['user_id'] = $user['user_id'];
+    if ($stmt) {
+        $stmt->bindValue(':email', $email, SQLITE3_TEXT);
+        $result = $stmt->execute();
 
-            // Criar um script JavaScript para definir o user_id em localStorage
-            echo "<script>";
-            echo "localStorage.setItem('user_id', '" . $user['user_id'] . "');";
-            echo "</script>";
+        // Verificar se o usuário foi encontrado
+        if ($row = $result->fetchArray(SQLITE3_ASSOC)) {
+            // Verificar a senha usando password_verify
+            if (password_verify($password, $row['password'])) {
+                // Iniciar a sessão e armazenar o email do usuário na variável de sessão
+                $_SESSION['email'] = $email;
+                $_SESSION['user_id'] = $row['user_id'];
 
-            // Redirecionar para a página inicial
-            header("Location: ./");
-            exit();
+                // Criar um script JavaScript para definir o user_id em localStorage
+                echo "<script>";
+                echo "localStorage.setItem('user_id', '" . $row['user_id'] . "');";
+                echo "</script>";
+
+                // Redirecionar para a página inicial
+                header("Location: ./");
+                exit();
+            } else {
+                // Senha incorreta
+                ?>
+                <div id="alertError" class="alert alert-danger" role="alert" style="display: block;">
+                    <span id="alertText">Email ou senha incorretos, tente novamente!</span>
+                </div>
+                <?php
+            }
         } else {
-            // Senha incorreta
+            // Email não encontrado
             ?>
             <div id="alertError" class="alert alert-danger" role="alert" style="display: block;">
                 <span id="alertText">Email ou senha incorretos, tente novamente!</span>
@@ -52,21 +63,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <?php
         }
     } else {
-        // Email não encontrado
+        // Erro na preparação da consulta
         ?>
         <div id="alertError" class="alert alert-danger" role="alert" style="display: block;">
-            <span id="alertText">Email ou senha incorretos, tente novamente!</span>
+            <span id="alertText">Erro no banco de dados. Por favor, tente novamente mais tarde.</span>
         </div>
         <?php
     }
 }
-echo "<script>";
-echo "localStorage.removeItem('user_id');";
-echo "</script>";
-
 ?>
-
-
 <!DOCTYPE html>
 <html lang="pt">
 <head>
@@ -77,25 +82,17 @@ echo "</script>";
     <link rel="shortcut icon" href="core/assets/img/favicon.ico" type="image/x-icon">
 </head>
 <body>
-
-<?php
-        if (isset($_SESSION['message'])) { ?>
-        <div id="alertError" class="alert alert-danger" role="alert" style="display: block;">
-        <span id="alertText">
+    <!-- Exibir mensagens de sessão, se houver -->
+    <?php if (isset($_SESSION['message'])): ?>
+        <div class="alert alert-danger" role="alert">
             <?php echo htmlspecialchars($_SESSION['message']); ?>
-        </span>
-        <button type="button" class="btn-close" onclick="closeAlert()">×</button>
-    </div>
-            
-        <?php unset($_SESSION['message']); }  ?>
-    <!-- Alerta de erro -->
-    <div id="alertError" class="alert alert-danger" role="alert" style="display: none;">
-        <span id="alertText"></span>
-        <button type="button" class="btn-close" onclick="closeAlert()">×</button>
-    </div>
+        </div>
+        <?php unset($_SESSION['message']); ?>
+    <?php endif; ?>
 
+    <!-- Formulário de login -->
     <div id="loginWindow">
-        <form id="loginForm" method="post" action="login">
+        <form id="loginForm" method="post" action="login.php">
             <div id="row">
                 <span class="form-logo">NBX OS</span>
             </div>
@@ -111,16 +108,16 @@ echo "</script>";
         </form>
         <div id="row" class="register-span">Não possui uma conta? <a href="register" class="purple">Registre-se!</a></div>
     </div>
+
+    <!-- Script para fechar alerta de erro automaticamente -->
     <script>
         function closeAlert() {
-    var alertError = document.getElementById('alertError');
-    if (alertError) {
-        alertError.style.display = 'none';
-    }
-}
-setTimeout(closeAlert, 5000);
+            var alertError = document.getElementById('alertError');
+            if (alertError) {
+                alertError.style.display = 'none';
+            }
+        }
+        setTimeout(closeAlert, 5000);
     </script>
-    
-</body>
 </body>
 </html>
