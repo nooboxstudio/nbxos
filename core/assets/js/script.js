@@ -167,8 +167,6 @@ function openAppWindow(app, path = `users/${userId}/apps/${app.appname}`) {
     // Adiciona o ícone na barra de tarefas
     addTaskbarIcon(app.appname, `apps/${app.appname}/${app.logo}`);
 
-    // Atualiza o user.json com as janelas abertas
-    updateOpenWindowsInJson();
 
     // Adiciona evento para trazer a janela para frente ao clicar nela
     appWindow.addEventListener('mousedown', () => {
@@ -267,12 +265,13 @@ function openProfileWindow() {
     titleBar.appendChild(controls);
     profileWindow.appendChild(titleBar);
 
-    // Conteúdo da janela do perfil (iframe, formulário, etc.)
-    const profileContent = document.createElement('iframe');
-    profileContent.src = 'core/systemapps/profile'; // URL da index do perfil
-    profileContent.style.width = '100%';
-    profileContent.style.height = 'calc(100% - 30px)'; // Ajuste conforme a altura da barra de título
-    profileWindow.appendChild(profileContent);
+    const appContent = document.createElement('iframe');
+    appContent.src = 'core/systemapps/profile'; // Caminho personalizado para o aplicativo
+    appContent.width = '100%';
+    appContent.height = 'calc(100% - 30px)'; // Ajusta a altura descontando a altura da barra de título
+    appContent.style.border = 'none';
+    // Adiciona o conteúdo do aplicativo à janela
+    profileWindow.appendChild(appContent);
 
     // Adiciona a janela do perfil à área de desktop
     desktop.appendChild(profileWindow);
@@ -419,7 +418,6 @@ function closeApp(appWindow, app) {
     }
 }
 
-// Função para tornar uma janela redimensionável
 // Função para tornar uma janela redimensionável
 function makeResizable(element) {
     const resizers = document.createElement('div');
@@ -713,3 +711,253 @@ document.addEventListener("DOMContentLoaded", function() {
     addEventListeners(contextMenu);
 });
 
+
+
+/*#################################################################################
+# JANELA DE SETTINGS
+##################################################################################*/
+
+// Função para abrir a janela do perfil
+function openSettingsWindow() {
+    const desktop = document.getElementById('desktop');
+
+    // Verifica se já existe uma instância da janela do perfil aberta
+    let existingWindow = openAppWindows.find(win => win.appname === 'Settings');
+    if (existingWindow) {
+        if (existingWindow.minimized) {
+            restoreApp(existingWindow.window);
+        }
+        return;
+    }
+
+    // Cria uma nova janela na área de desktop para o perfil
+    const settingsWindow = document.createElement('div');
+    settingsWindow.classList.add('app-window');
+    settingsWindow.setAttribute('data-appname', 'Settings'); // Adiciona um atributo para identificação
+    settingsWindow.style.zIndex = highestZIndex++; // Define o z-index e incrementa a variável
+
+    // Cria a barra de título da janela do perfil
+    const titleBar = document.createElement('div');
+    titleBar.classList.add('title-bar');
+
+    // Ícone do perfil
+    const icon = document.createElement('img');
+    icon.src = 'core/systemapps/settings/img/icon.png'; // Caminho para o ícone do perfil
+    icon.alt = 'Settings';
+    icon.classList.add('app-icon'); // Adicione uma classe se precisar de estilos específicos
+    titleBar.appendChild(icon);
+
+    // Título da janela do perfil
+    const title = document.createElement('span');
+    title.textContent = 'Settings';
+    title.classList.add('title');
+    titleBar.appendChild(title);
+
+    // Botões de controle (minimizar, maximizar, fechar)
+    const controls = document.createElement('div');
+    controls.classList.add('controls');
+
+    // Botão Minimizar (opcional para o perfil)
+    const minimizeButton = document.createElement('button');
+    minimizeButton.textContent = '_';
+    minimizeButton.classList.add('minimize-button');
+    minimizeButton.addEventListener('click', () => {
+        minimizeApp(settingsWindow);
+    });
+    controls.appendChild(minimizeButton);
+
+    // Botão Maximizar (opcional para o perfil)
+    const maximizeButton = document.createElement('button');
+    maximizeButton.textContent = '+';
+    maximizeButton.classList.add('maximize-button');
+    maximizeButton.addEventListener('click', () => {
+        maximizeApp(settingsWindow);
+    });
+    controls.appendChild(maximizeButton);
+
+    // Botão Fechar
+    const closeButton = document.createElement('button');
+    closeButton.textContent = 'X';
+    closeButton.classList.add('close-button');
+    closeButton.addEventListener('click', () => {
+        closeApp(settingsWindow, { appname: 'Settings' }); // Passe um objeto simulado para corresponder à estrutura esperada
+    });
+    controls.appendChild(closeButton);
+
+    titleBar.appendChild(controls);
+    settingsWindow.appendChild(titleBar);
+
+   
+    const appContent = document.createElement('iframe');
+    appContent.src = 'core/systemapps/settings'; // Caminho personalizado para o aplicativo
+    appContent.width = '100%';
+    appContent.height = 'calc(100% - 30px)'; // Ajusta a altura descontando a altura da barra de título
+    appContent.style.border = 'none';
+    // Adiciona o conteúdo do aplicativo à janela
+    settingsWindow.appendChild(appContent);
+
+
+    // Adiciona a janela do perfil à área de desktop
+    desktop.appendChild(settingsWindow);
+
+
+    
+
+    // Redimensionamento da janela do perfil (opcional)
+    makeResizable(settingsWindow);
+
+    // Movimentação da janela do perfil
+    makeDraggable(settingsWindow, titleBar);
+
+    // Adiciona a referência da janela do perfil aberta ao array
+    openAppWindows.push({
+        appname: 'Settings',
+        window: settingsWindow,
+        minimized: false,
+        maximized: false,
+        previousSize: null
+    });
+
+    // Adiciona o ícone na barra de tarefas (opcional para o perfil)
+    addTaskbarIcon('Settings', 'core/systemapps/settings/img/icon.png');
+
+    // Adiciona evento para trazer a janela do perfil para frente ao clicar nela
+    settingsWindow.addEventListener('mousedown', () => {
+        bringToFront(settingsWindow);
+    });
+}
+
+// Inicialização: Adicione o listener para abrir a janela do perfil ao carregar o DOM
+document.addEventListener('DOMContentLoaded', () => {
+    const settingsDiv = document.getElementById('settings');
+    if (settingsDiv) {
+        settingsDiv.addEventListener('click', (event) => {
+            event.preventDefault();
+            openSettingsWindow();
+        });
+    }
+});
+
+
+/*#################################################################################
+# JANELA DE APP STORE
+##################################################################################*/
+
+function openAppstoreWindow() {
+    const desktop = document.getElementById('desktop');
+
+    // Verifica se já existe uma instância da janela do perfil aberta
+    let existingWindow = openAppWindows.find(win => win.appname === 'Appstore');
+    if (existingWindow) {
+        if (existingWindow.minimized) {
+            restoreApp(existingWindow.window);
+        }
+        return;
+    }
+
+    // Cria uma nova janela na área de desktop para o perfil
+    const appstoreWindow = document.createElement('div');
+    appstoreWindow.classList.add('app-window');
+    appstoreWindow.setAttribute('data-appname', 'appstore'); // Adiciona um atributo para identificação
+    appstoreWindow.style.zIndex = highestZIndex++; // Define o z-index e incrementa a variável
+
+    // Cria a barra de título da janela do perfil
+    const titleBar = document.createElement('div');
+    titleBar.classList.add('title-bar');
+
+    // Ícone do perfil
+    const icon = document.createElement('img');
+    icon.src = 'core/systemapps/appstore/img/icon.png'; // Caminho para o ícone do perfil
+    icon.alt = 'Appstore';
+    icon.classList.add('app-icon'); // Adicione uma classe se precisar de estilos específicos
+    titleBar.appendChild(icon);
+
+    // Título da janela do perfil
+    const title = document.createElement('span');
+    title.textContent = 'Appstore';
+    title.classList.add('title');
+    titleBar.appendChild(title);
+
+    // Botões de controle (minimizar, maximizar, fechar)
+    const controls = document.createElement('div');
+    controls.classList.add('controls');
+
+    // Botão Minimizar (opcional para o perfil)
+    const minimizeButton = document.createElement('button');
+    minimizeButton.textContent = '_';
+    minimizeButton.classList.add('minimize-button');
+    minimizeButton.addEventListener('click', () => {
+        minimizeApp(appstoreWindow);
+    });
+    controls.appendChild(minimizeButton);
+
+    // Botão Maximizar (opcional para o perfil)
+    const maximizeButton = document.createElement('button');
+    maximizeButton.textContent = '+';
+    maximizeButton.classList.add('maximize-button');
+    maximizeButton.addEventListener('click', () => {
+        maximizeApp(appstoreWindow);
+    });
+    controls.appendChild(maximizeButton);
+
+    // Botão Fechar
+    const closeButton = document.createElement('button');
+    closeButton.textContent = 'X';
+    closeButton.classList.add('close-button');
+    closeButton.addEventListener('click', () => {
+        closeApp(appstoreWindow, { appname: 'Appstore' }); // Passe um objeto simulado para corresponder à estrutura esperada
+    });
+    controls.appendChild(closeButton);
+
+    titleBar.appendChild(controls);
+    appstoreWindow.appendChild(titleBar);
+
+   
+
+    const appContent = document.createElement('iframe');
+    appContent.src = 'core/systemapps/appstore'; // Caminho personalizado para o aplicativo
+    appContent.width = '100%';
+    appContent.height = 'calc(100% - 30px)'; // Ajusta a altura descontando a altura da barra de título
+    appContent.style.border = 'none';
+
+    // Adiciona o conteúdo do aplicativo à janela
+    appstoreWindow.appendChild(appContent);
+
+    
+    // Adiciona a janela do perfil à área de desktop
+    desktop.appendChild(appstoreWindow);
+
+    // Redimensionamento da janela do perfil (opcional)
+    makeResizable(appstoreWindow);
+
+    // Movimentação da janela do perfil
+    makeDraggable(appstoreWindow, titleBar);
+
+    // Adiciona a referência da janela do perfil aberta ao array
+    openAppWindows.push({
+        appname: 'Appstore',
+        window: appstoreWindow,
+        minimized: false,
+        maximized: false,
+        previousSize: null
+    });
+
+    // Adiciona o ícone na barra de tarefas (opcional para o perfil)
+    addTaskbarIcon('Appstore', 'core/systemapps/appstore/img/icon.png');
+
+    // Adiciona evento para trazer a janela do perfil para frente ao clicar nela
+    appstoreWindow.addEventListener('mousedown', () => {
+        bringToFront(appstoreWindow);
+    });
+}
+
+// Inicialização: Adicione o listener para abrir a janela do perfil ao carregar o DOM
+document.addEventListener('DOMContentLoaded', () => {
+    const appstoreDiv = document.getElementById('appstore');
+    if (appstoreDiv) {
+        appstoreDiv.addEventListener('click', (event) => {
+            event.preventDefault();
+            openAppstoreWindow();
+        });
+    }
+});

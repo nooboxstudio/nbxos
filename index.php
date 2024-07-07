@@ -55,7 +55,6 @@ echo "</script>";
     </div>
     <div id="notifications-center"></div>
     <div id="desktop">
-
     </div>
     <div id="menu-content">
         <div id="menu-content-list">
@@ -64,7 +63,9 @@ echo "</script>";
         </div>
         <div id="menu-content-fixed">
             <div id="profile" style="cursor: pointer;"><?php echo $user_name; ?></div>
-            <div id="shutdown" class="shutdown"><a href="shutdown"><img src="core/assets/img/power.png" width="20"></a></div>
+            <div id="settings" class="shutdown" style="cursor: pointer;"><img src="core/assets/img/settings.png" width="20"></div>
+            <div id="appstore" class="shutdown" style="cursor: pointer;"><img src="core/assets/img/appstore.png" width="20"></div>
+            <div id="shutdown" class="shutdown" style="cursor: pointer;"><a href="shutdown"><img src="core/assets/img/power.png" width="20"></a></div>
         </div>
     </div>
     <ul id="context-menu" class="context-menu">

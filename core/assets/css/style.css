@@ -27,22 +27,6 @@ body {
 }
 
 
-
-#topbar {
-    width: 100vw;
-    height: 28px;
-    background-color: #1c1c1c;
-    border-bottom: ridge #404040 1px;
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 1000;
-    display: flex;
-    justify-content: left; /* Distribui o espaço entre os itens */
-    align-items: center;
-    padding: 0 10px;
-}
-
 #menu {
     width: 48px;
     height: 48px;
@@ -76,7 +60,7 @@ body {
     transition: transform 0.3s ease; /* Transição para transform */
     padding: 10px;
     color: #fff;
-    z-index: 100000; /* Z-index menor que o menu-content-bar */
+    z-index: 1000; /* Z-index menor que o menu-content-bar */
 }
 
 #menu-content.show {
@@ -351,73 +335,9 @@ body {
     overflow-y: auto; /* Adiciona barra de rolagem vertical quando necessário */
 }
 
-#desktop h1 {
-    margin-bottom: 20px;
-    color: #333;
-}
-
-.title-bar {
-    background-color: #141414;
-    color: #fff;
-    height: 30px;
-    display: flex;
-    align-items: center;
-    padding: 0 0 0 10px;
-    user-select: none;
-    position: relative;
-    z-index: 101;
-    text-align: left; /* Alinha o texto à esquerda */
-    justify-content: flex-end;
-}
-
-.title-bar .app-icon {
-    display: flex;
-    align-items: center;
-    width: 16px;
-}
-
-.title-bar .app-icon img {
-    width: 16px;
-    height: 16px;
-    margin-right: 5px;
-    flex-shrink: 0;
-}
-
-.title-bar .title {
-    font-size: 14px;
-    margin-left: 10px; /* Ajuste conforme necessário para espaçamento entre ícone e título */
-    width: 99%;
-    text-transform: uppercase;
-
-}
-
-.title-bar .controls {
-    display: flex;
-    gap: 5px;
-    
-}
-
-.title-bar .controls button {
-    background-color: transparent;
-    border: none;
-    color: #fff;
-    cursor: pointer;
-    font-size: 12px;
-    width: 30px;
-    height: 30px;
-    padding: 5px;
-}
-
-.title-bar .controls button:hover {
-    background-color: rgba(255, 255, 255, 0.2);
-}
-
-.title-bar .controls .close-button:hover {
-    background-color: rgba(197, 2, 2, 0.959);
-}
-
-
-
+/*##############################################################################
+# JANELA
+##############################################################################*/
 /* Estilos para a janela do aplicativo */
 .app-window {
     position: absolute;
@@ -429,6 +349,16 @@ body {
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     z-index: 100; /* Garante que a janela esteja acima do resto do conteúdo */
     overflow: hidden; /* Esconde a barra de rolagem interna */
+}
+
+.app-window iframe{
+    position: absolute;
+    top: 30px; /* Ajuste conforme necessário */
+    left: 0; /* Ajuste conforme necessário */
+    width: 100%; /* Largura inicial da janela */
+    height: calc(100% - 30px); /* Altura mínima da janela */
+    overflow: hidden; /* Esconde a barra de rolagem interna */
+    z-index: 102;
 }
 
 .app-window.maximized {
@@ -513,6 +443,69 @@ body {
     cursor: ew-resize;
     transform: translateY(-50%);
 }
+.title-bar {
+    background-color: #141414;
+    color: #fff;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    padding: 0 0 0 10px;
+    user-select: none;
+    position: relative;
+    z-index: 101;
+    text-align: left; /* Alinha o texto à esquerda */
+    justify-content: flex-end;
+}
+
+.title-bar .app-icon {
+    display: flex;
+    align-items: center;
+    width: 16px;
+}
+
+.title-bar .app-icon img {
+    width: 16px;
+    height: 16px;
+    margin-right: 5px;
+    flex-shrink: 0;
+}
+
+.title-bar .title {
+    font-size: 14px;
+    margin-left: 10px; /* Ajuste conforme necessário para espaçamento entre ícone e título */
+    width: 99%;
+    text-transform: uppercase;
+
+}
+
+.title-bar .controls {
+    display: flex;
+    gap: 5px;
+    
+}
+
+.title-bar .controls button {
+    background-color: transparent;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    font-size: 12px;
+    width: 30px;
+    height: 30px;
+    padding: 5px;
+}
+
+.title-bar .controls button:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.title-bar .controls .close-button:hover {
+    background-color: rgba(197, 2, 2, 0.959);
+}
+
+
+
+
 
 
 
@@ -522,7 +515,7 @@ body {
     position: absolute;
     background-color: #4d4d4d;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-    z-index: 1000;
+    z-index: 1;
     width: 260px;
     min-height: 300px;
     height: auto;
@@ -570,5 +563,23 @@ body {
 }
 
 .context-menu li:not(:hover) >.submenu {
+    display: none;
+}
+
+
+/*#####################################################
+# Installer
+######################################################*/
+#installer {
+    position: absolute;
+    top: calc(50% - 100px); /* Ajuste conforme necessário */
+    left: calc(50% - 200px);  /* Ajuste conforme necessário */
+    width: 400px; /* Largura inicial da janela */
+    min-height: 200px; /* Altura mínima da janela */
+    background-color: #fff;
+    border-radius: 10px;
+    z-index: 100; /* Garante que a janela esteja acima do resto do conteúdo */
+    overflow: hidden; /* Esconde a barra de rolagem interna */
+    border: solid #868686 2px;
     display: none;
 }
