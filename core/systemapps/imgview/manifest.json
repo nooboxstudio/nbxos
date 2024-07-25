@@ -1,0 +1,7 @@
+{
+    "appname":"Image Viewr",
+    "desc":"Visualizador de Imagens",
+    "version": "1.0",
+    "appindex": "index.php",
+    "logo":"assets/img/icon.png"
+}

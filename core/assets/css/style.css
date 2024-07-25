@@ -346,7 +346,7 @@ body {
     width: 80%; /* Largura inicial da janela */
     min-height: 80%; /* Altura mínima da janela */
     background-color: #fff;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
     z-index: 100; /* Garante que a janela esteja acima do resto do conteúdo */
     overflow: hidden; /* Esconde a barra de rolagem interna */
 }
@@ -358,7 +358,7 @@ body {
     width: 100%; /* Largura inicial da janela */
     height: calc(100% - 30px); /* Altura mínima da janela */
     overflow: hidden; /* Esconde a barra de rolagem interna */
-    z-index: 102;
+    z-index: 100;
 }
 
 .app-window.maximized {
@@ -516,7 +516,8 @@ body {
     background-color: #4d4d4d;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
     z-index: 1;
-    width: 260px;
+    width: auto;
+    min-width: 260px;
     min-height: 300px;
     height: auto;
     border-radius: 5px;
@@ -524,6 +525,10 @@ body {
     list-style: none;
     margin: 0;
     padding: 0;
+}
+
+.context-menu li:first-child {
+    margin-top: 10px;
 }
 
 .context-menu li {
@@ -539,6 +544,11 @@ body {
 .context-menu li:hover {
     background-color: #5d5d5d;
     border-radius: 3px;
+}
+
+.context-menu li a{
+    color: #fff;
+    text-decoration: none;
 }
 
 .submenu {

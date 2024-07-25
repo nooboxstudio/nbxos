@@ -7,7 +7,7 @@ include_once('kernel/functions.php');
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
-
+$user_id = $_SESSION['user_id'];
 
 
 // Verificar se o usuário está logado
@@ -18,7 +18,8 @@ if (!isset($_SESSION['email'])) {
 }
 
 
-$user_id = $_SESSION['user_id'];
+
+
 echo "<script>";
 echo "localStorage.setItem('user_id', '" . $user_id . "');";
 echo "</script>";
@@ -41,6 +42,7 @@ echo "</script>";
         ">
     <div id="taskbar">
         <div id="menu"></div>
+        <div id="explorer" style="cursor: pointer;"><img src="core/assets/img/explorer.png" width="42"></div>
         <div id="taskbar-apps"></div>
         <div id="clock">
             <div class="clock-container">
@@ -61,26 +63,23 @@ echo "</script>";
         <ul><?php echo listUserApps(); ?></ul>
         </div>
         <div id="menu-content-fixed">
-            <div id="profile" style="cursor: pointer;"><?php echo $user_name; ?> | <?php echo $user_id?></div>
+            <div id="profile" style="cursor: pointer;"><?php echo $user_name; ?></div>
             <div id="settings" class="shutdown" style="cursor: pointer;"><img src="core/assets/img/settings.png" width="20"></div>
             <div id="appstore" class="shutdown" style="cursor: pointer;"><img src="core/assets/img/appstore.png" width="20"></div>
             <div id="shutdown" class="shutdown" style="cursor: pointer;"><a href="shutdown"><img src="core/assets/img/power.png" width="20"></a></div>
         </div>
     </div>
     <ul id="context-menu" class="context-menu">
-        <li id="option1">Opção 1</li>
-        <li id="option2">Opção 2 <span>></span>
+        
+        <li>Novo<span>></span>
             <ul class="submenu">
-                <li>Sub-opção 2</li>
-                <li>Sub-opção 1 <span>></span>
-                    <ul class="submenu">
-                        <li>Sub-opção 1</li>
-                        <li>Sub-opção 2</li>
-                    </ul>
-                </li>
+                <li id="new-desktop-shortcut">Atalho no Desktop</li>
+                <li><a href="core/systemapps/text-editor" onclick="openAppWindowFromLink(this); return false;">Editor de Texto</a></li>
                 
             </ul>
         </li>
+        <hr>
+        <li id="customization"><a href="#">Personalização</a></li>
         <li id="option3">Opção 3</li>
     </ul>
 

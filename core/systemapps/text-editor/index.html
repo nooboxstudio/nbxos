@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editor de Texto</title>
+    <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+    <div>
+        <button id="saveFile">Salvar</button>
+        <button onclick="formatText('bold')">Negrito</button>
+        <button onclick="formatText('italic')">Itálico</button>
+        <button onclick="formatText('underline')">Sublinhado</button>
+    </div>
+    <div id="editor" contenteditable="true" style="border: 1px solid #ccc; padding: 10px; min-height: 300px;">
+        <!-- Conteúdo editável -->
+    </div>
+    
+    <script src="assets/js/editor.js"></script>
+</body>
+</html>

@@ -32,9 +32,16 @@ function listUserApps() {
             <li>
                 <img src="users/' . $user_id . '/apps/' . $app['app_path'] .'/'. $app['app_icon'] . '" alt="' . $app['app_name'] . '" width="16">
                 <a href="users/' . $user_id . '/apps/' . $app['app_path'] . '" onclick="openAppWindowFromLink(this); return false;">' . $app['app_name'] . '</a>
-            </li>';
+            </li>
+            ';
+            
         }
-        $html .= '</ul>';
+        $html .= '
+        <li>
+                <img src="core/systemapps/text-editor/assets/img/icon.png" width="16">
+                <a href="core/systemapps/text-editor" onclick="openAppWindowFromLink(this); return false;">Editor de Texto</a>
+            </li>
+        </ul>';
 
         return $html; // Retorna a lista de aplicativos como uma string HTML
     } else {

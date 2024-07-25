@@ -1,6 +1,6 @@
 <?php
 // Caminho para o banco de dados SQLite
-$db_path = 'nbxos.db';
+$db_path = 'kernel/nbxos.db';
 
 // Conectar ao banco de dados SQLite
 $db = new SQLite3($db_path);

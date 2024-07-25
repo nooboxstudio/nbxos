@@ -6,6 +6,8 @@ let highestZIndex = 1;
 // Após o PHP definir $_SESSION['user_id']
 let userId = localStorage.getItem('user_id');
 
+let closeMenu;
+
 /*#################################################
 # Função para abrir o menu
 ##################################################*/
@@ -58,22 +60,26 @@ document.addEventListener('DOMContentLoaded', function() {
 ##################################################*/
 
 function openAppWindowFromLink(link) {
-    // Extrai o caminho base do aplicativo do atributo href do link
-    const appPath = link.getAttribute('href');
+    // Extrai o caminho do arquivo do atributo href do link
+    const filePath = link.getAttribute('href');
 
-    // Constrói o caminho completo para o manifesto JSON
-    const jsonPath = `${appPath}/manifest.json`;
-    
-    // Realiza uma requisição AJAX para carregar o manifesto do aplicativo
-    fetch(jsonPath)
-        .then(response => response.json())
-        .then(app => {
-            openAppWindow(app, appPath); // Passa appPath como o caminho base do aplicativo
-            
-        })
-        .catch(error => console.error('Erro ao carregar o manifesto do aplicativo:', error));
-        
+    // Se o arquivo for um arquivo de texto, abra-o no editor
+    if (filePath.endsWith('.txt')) {
+        openTextEditor(filePath);
+    } else {
+        // Para outros tipos de arquivos, use a abordagem padrão
+        const appPath = link.getAttribute('href');
+        const jsonPath = `${appPath}/manifest.json`;
+
+        fetch(jsonPath)
+            .then(response => response.json())
+            .then(app => {
+                openAppWindow(app, appPath);
+            })
+            .catch(error => console.error('Erro ao carregar o manifest.json da aplicação:', error));
+    }
 }
+
 
 function openAppWindow(app, appPath) {
     const desktop = document.getElementById('desktop');
@@ -151,12 +157,15 @@ function openAppWindow(app, appPath) {
     appContent.height = 'calc(100% - 30px)'; // Ajusta a altura descontando a altura da barra de título
     appContent.style.border = 'none';
 
+
+    
+
     // Adiciona o conteúdo do aplicativo à janela
     appWindow.appendChild(appContent);
     
     // Adiciona a janela à área de desktop
     desktop.appendChild(appWindow);
-    
+
     // Redimensionamento da janela
     makeResizable(appWindow);
     
@@ -179,7 +188,7 @@ function openAppWindow(app, appPath) {
     appWindow.addEventListener('mousedown', () => {
         bringToFront(appWindow);
     });
-    closeMenu();
+    
 }
 
 /*#############################################################################
@@ -674,7 +683,7 @@ document.addEventListener("DOMContentLoaded", function() {
         Array.prototype.forEach.call(menu.children, function(item) {
             if (item.tagName === 'LI') {
                 item.addEventListener('click', function() {
-                    alert(`Opção ${item.textContent} selecionada`);
+                    //alert(`Opção ${item.textContent} selecionada`);
                     contextMenu.style.display = 'none';
                 });
                 if (item.querySelector('.submenu')) {
@@ -937,3 +946,214 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+
+
+/*####################################################################################
+# JANELA DO EXPLORADOR DE ARQUIVOS
+#####################################################################################*/
+function openExplorerWindow() {
+    const desktop = document.getElementById('desktop');
+
+    // Verifica se já existe uma instância da janela do perfil aberta
+    let existingWindow = openAppWindows.find(win => win.appname === 'Explorer');
+    if (existingWindow) {
+        if (existingWindow.minimized) {
+            restoreApp(existingWindow.window);
+        }
+        return;
+    }
+
+    // Cria uma nova janela na área de desktop para o perfil
+    const explorerWindow = document.createElement('div');
+    explorerWindow.classList.add('app-window');
+    explorerWindow.setAttribute('data-appname', 'Explorer'); // Adiciona um atributo para identificação
+    explorerWindow.style.zIndex = highestZIndex++; // Define o z-index e incrementa a variável
+
+    // Cria a barra de título da janela do perfil
+    const titleBar = document.createElement('div');
+    titleBar.classList.add('title-bar');
+
+    // Ícone do perfil
+    const icon = document.createElement('img');
+    icon.src = 'core/systemapps/explorer/assets/img/icon.png'; // Caminho para o ícone do perfil
+    icon.alt = 'Explorer';
+    icon.classList.add('app-icon'); // Adicione uma classe se precisar de estilos específicos
+    titleBar.appendChild(icon);
+
+    // Título da janela do perfil
+    const title = document.createElement('span');
+    title.textContent = 'Explorer';
+    title.classList.add('title');
+    titleBar.appendChild(title);
+
+    // Botões de controle (minimizar, maximizar, fechar)
+    const controls = document.createElement('div');
+    controls.classList.add('controls');
+
+    // Botão Minimizar (opcional para o perfil)
+    const minimizeButton = document.createElement('button');
+    minimizeButton.textContent = '_';
+    minimizeButton.classList.add('minimize-button');
+    minimizeButton.addEventListener('click', () => {
+        minimizeApp(explorerWindow);
+    });
+    controls.appendChild(minimizeButton);
+
+    // Botão Maximizar (opcional para o perfil)
+    const maximizeButton = document.createElement('button');
+    maximizeButton.textContent = '+';
+    maximizeButton.classList.add('maximize-button');
+    maximizeButton.addEventListener('click', () => {
+        maximizeApp(explorerWindow);
+    });
+    controls.appendChild(maximizeButton);
+
+    // Botão Fechar
+    const closeButton = document.createElement('button');
+    closeButton.textContent = 'X';
+    closeButton.classList.add('close-button');
+    closeButton.addEventListener('click', () => {
+        closeApp(explorerWindow, { appname: 'Explorer' }); // Passe um objeto simulado para corresponder à estrutura esperada
+    });
+    controls.appendChild(closeButton);
+
+    titleBar.appendChild(controls);
+    explorerWindow.appendChild(titleBar);
+
+    const appContent = document.createElement('iframe');
+    appContent.src = 'core/systemapps/explorer'; // Caminho personalizado para o aplicativo
+    appContent.width = '100%';
+    appContent.height = 'calc(100% - 30px)'; // Ajusta a altura descontando a altura da barra de título
+    appContent.style.border = 'none';
+    // Adiciona o conteúdo do aplicativo à janela
+    explorerWindow.appendChild(appContent);
+
+    // Adiciona a janela do perfil à área de desktop
+    desktop.appendChild(explorerWindow);
+
+    // Redimensionamento da janela do perfil (opcional)
+    makeResizable(explorerWindow);
+
+    // Movimentação da janela do perfil
+    makeDraggable(explorerWindow, titleBar);
+
+    // Adiciona a referência da janela do perfil aberta ao array
+    openAppWindows.push({
+        appname: 'Explorer',
+        window: explorerWindow,
+        minimized: false,
+        maximized: false,
+        previousSize: null
+    });
+
+    // Adiciona o ícone na barra de tarefas (opcional para o perfil)
+    //addTaskbarIcon('Explorer', 'core/systemapps/explorer/img/icon.png');
+
+    // Atualiza o user.json com as janelas abertas (opcional)
+    updateOpenWindowsInJson();
+
+    // Adiciona evento para trazer a janela do perfil para frente ao clicar nela
+    explorerWindow.addEventListener('mousedown', () => {
+        bringToFront(explorerWindow);
+    });
+}
+
+// Inicialização: Adicione o listener para abrir a janela do perfil ao carregar o DOM
+document.addEventListener('DOMContentLoaded', () => {
+    const explorerDiv = document.getElementById('explorer');
+    if (explorerDiv) {
+        explorerDiv.addEventListener('click', (event) => {
+            event.preventDefault();
+            openExplorerWindow();
+        });
+    }
+});
+
+/*####################### FIM DO EXPLORADOR DE ARQUIVOS########################################*/
+
+
+/*#################### OPEN TEXT EDITOR #######################################################*/
+function openTextEditor(filePath) {
+    // Verifica se já existe uma instância do editor aberta
+    let existingWindow = openAppWindows.find(win => win.appname === 'TextEditor');
+    if (existingWindow) {
+        if (existingWindow.minimized) {
+            restoreApp(existingWindow.window);
+        }
+        return;
+    }
+
+    // Cria uma nova janela para o editor de texto
+    const appWindow = document.createElement('div');
+    appWindow.classList.add('app-window');
+    appWindow.setAttribute('data-appname', 'TextEditor');
+    appWindow.style.zIndex = highestZIndex++;
+
+    const titleBar = document.createElement('div');
+    titleBar.classList.add('title-bar');
+
+    const title = document.createElement('span');
+    title.textContent = 'Text Editor';
+    title.classList.add('title');
+    titleBar.appendChild(title);
+
+    const controls = document.createElement('div');
+    controls.classList.add('controls');
+
+    const minimizeButton = document.createElement('button');
+    minimizeButton.textContent = '_';
+    minimizeButton.classList.add('minimize-button');
+    minimizeButton.addEventListener('click', () => minimizeApp(appWindow));
+    controls.appendChild(minimizeButton);
+
+    const maximizeButton = document.createElement('button');
+    maximizeButton.textContent = '+';
+    maximizeButton.classList.add('maximize-button');
+    maximizeButton.addEventListener('click', () => maximizeApp(appWindow));
+    controls.appendChild(maximizeButton);
+
+    const closeButton = document.createElement('button');
+    closeButton.textContent = 'X';
+    closeButton.classList.add('close-button');
+    closeButton.addEventListener('click', () => closeApp(appWindow, { appname: 'TextEditor' }));
+    controls.appendChild(closeButton);
+
+    titleBar.appendChild(controls);
+    appWindow.appendChild(titleBar);
+
+    // Cria o conteúdo da janela
+    const textContent = document.createElement('textarea');
+    textContent.id = 'text-editor-content';
+    textContent.style.width = '100%';
+    textContent.style.height = 'calc(100% - 30px)'; // Ajusta altura descontando a altura da barra de título
+    textContent.style.border = 'none';
+
+    appWindow.appendChild(textContent);
+    document.getElementById('desktop').appendChild(appWindow);
+
+    makeResizable(appWindow);
+    makeDraggable(appWindow, titleBar);
+
+    openAppWindows.push({
+        appname: 'TextEditor',
+        window: appWindow,
+        minimized: false,
+        maximized: false,
+        previousSize: null
+    });
+
+    addTaskbarIcon('TextEditor', 'path/to/text-editor-icon.png');
+
+    appWindow.addEventListener('mousedown', () => bringToFront(appWindow));
+
+    // Carrega o conteúdo do arquivo de texto
+    fetch(filePath)
+        .then(response => response.text())
+        .then(text => {
+            textContent.value = text;
+        })
+        .catch(error => console.error('Erro ao carregar o arquivo de texto:', error));
+}
+
+/*#################### OPEN TEXT EDITOR END ####################################################*/
