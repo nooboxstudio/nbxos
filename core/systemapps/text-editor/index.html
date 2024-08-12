@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Text Editor</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="toolbar">
+    <button id="saveFile">Salvar</button>
+    <button id="chooseFolder">Escolher Pasta</button>
+  </div>
+  <textarea id="editor" placeholder="Aqui você pode começar a digitar..."></textarea>
+  <script src="script.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Obtém o parâmetro de URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const filePath = urlParams.get('file');
+
+        if (filePath) {
+            fetch(`open_file.php?file=${encodeURIComponent(filePath)}`)
+                .then(response => response.text())
+                .then(text => {
+                    document.getElementById('editor').value = text;
+                })
+                .catch(error => console.error('Erro ao abrir o arquivo:', error));
+        }
+    });
+  </script>
+</body>
+</html>

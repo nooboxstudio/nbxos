@@ -1,0 +1,11 @@
+RewriteEngine on
+RewriteBase /
+
+# Verifica se a requisição não é AJAX
+#RewriteCond %{HTTP:X-Requested-With} !XMLHttpRequest
+
+# Verifica se o arquivo não existe como um arquivo real
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^([^\.]+)$ $1.php [NC,L]
+
