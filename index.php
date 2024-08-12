@@ -33,6 +33,8 @@ echo "</script>";
     <title>DESKTOP | NBX OS</title>
     <link rel="stylesheet" href="core/assets/css/style.css">
     <link rel="shortcut icon" href="core/assets/img/favicon.ico" type="image/x-icon">
+	<link rel="manifest" href="manifest.json" />
+
 </head>
 <body style="
             background-image: url('core/assets/img/login_bg.jpg');

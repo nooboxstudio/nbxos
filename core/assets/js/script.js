@@ -60,17 +60,12 @@ document.addEventListener('DOMContentLoaded', function() {
 ##################################################*/
 
 function openAppWindowFromLink(link) {
-    // Extrai o caminho do arquivo do atributo href do link
     const filePath = link.getAttribute('href');
-
-    // Se o arquivo for um arquivo de texto, abra-o no editor
     if (filePath.endsWith('.txt')) {
         openTextEditor(filePath);
     } else {
-        // Para outros tipos de arquivos, use a abordagem padrão
         const appPath = link.getAttribute('href');
         const jsonPath = `${appPath}/manifest.json`;
-
         fetch(jsonPath)
             .then(response => response.json())
             .then(app => {
@@ -79,6 +74,7 @@ function openAppWindowFromLink(link) {
             .catch(error => console.error('Erro ao carregar o manifest.json da aplicação:', error));
     }
 }
+
 
 
 function openAppWindow(app, appPath) {
@@ -1157,3 +1153,106 @@ function openTextEditor(filePath) {
 }
 
 /*#################### OPEN TEXT EDITOR END ####################################################*/
+function openTextEditor(filePath) {
+    // Verifica se já existe uma instância do editor de texto aberta
+    let existingEditor = openAppWindows.find(win => win.appname === 'Text Editor');
+    if (existingEditor) {
+        if (existingEditor.minimized) {
+            restoreApp(existingEditor.window);
+        }
+        return;
+    }
+    
+    // Cria uma nova janela para o editor de texto
+    const appWindow = document.createElement('div');
+    appWindow.classList.add('app-window');
+    appWindow.setAttribute('data-appname', 'Text Editor'); // Identifica a janela como Editor de Texto
+    appWindow.style.zIndex = highestZIndex++; // Define o z-index e incrementa a variável
+
+    // Cria a barra de título do editor
+    const titleBar = document.createElement('div');
+    titleBar.classList.add('title-bar');
+
+    // Ícone do editor
+    const icon = document.createElement('img');
+    icon.src = 'assets/img/text-editor-icon.png'; // Caminho para o ícone do editor
+    icon.alt = 'Text Editor';
+    icon.classList.add('app-icon');
+    titleBar.appendChild(icon);
+
+    // Título do editor
+    const title = document.createElement('span');
+    title.textContent = 'Text Editor';
+    title.classList.add('title');
+    titleBar.appendChild(title);
+
+    // Botões de controle (minimizar, maximizar, fechar)
+    const controls = document.createElement('div');
+    controls.classList.add('controls');
+
+    // Botão Minimizar
+    const minimizeButton = document.createElement('button');
+    minimizeButton.textContent = '_';
+    minimizeButton.classList.add('minimize-button');
+    minimizeButton.addEventListener('click', () => {
+        minimizeApp(appWindow);
+    });
+    controls.appendChild(minimizeButton);
+
+    // Botão Maximizar
+    const maximizeButton = document.createElement('button');
+    maximizeButton.textContent = '+';
+    maximizeButton.classList.add('maximize-button');
+    maximizeButton.addEventListener('click', () => {
+        maximizeApp(appWindow);
+    });
+    controls.appendChild(maximizeButton);
+
+    // Botão Fechar
+    const closeButton = document.createElement('button');
+    closeButton.textContent = 'X';
+    closeButton.classList.add('close-button');
+    closeButton.addEventListener('click', () => {
+        closeApp(appWindow, { appname: 'Text Editor' });
+    });
+    controls.appendChild(closeButton);
+
+    titleBar.appendChild(controls);
+    appWindow.appendChild(titleBar);
+
+    // Cria o conteúdo do editor (iframe)
+    const appContent = document.createElement('iframe');
+    appContent.src = `core/systemapps/text-editor/index.html?file=${encodeURIComponent(filePath)}`; // Passa o caminho do arquivo para o editor
+    appContent.width = '100%';
+    appContent.height = 'calc(100% - 30px)'; // Ajusta a altura descontando a altura da barra de título
+    appContent.style.border = 'none';
+
+    appWindow.appendChild(appContent);
+
+    // Adiciona a janela à área de desktop
+    const desktop = document.getElementById('desktop');
+    desktop.appendChild(appWindow);
+
+    // Redimensionamento da janela
+    makeResizable(appWindow);
+
+    // Movimentação da janela
+    makeDraggable(appWindow, titleBar);
+
+    // Adiciona a referência da janela aberta ao array
+    openAppWindows.push({
+        appname: 'Text Editor',
+        window: appWindow,
+        minimized: false,
+        maximized: false,
+        previousSize: null
+    });
+
+    // Adiciona o ícone na barra de tarefas
+    addTaskbarIcon('Text Editor', 'assets/img/text-editor-icon.png');
+
+    // Adiciona evento para trazer a janela para frente ao clicar nela
+    appWindow.addEventListener('mousedown', () => {
+        bringToFront(appWindow);
+    });
+}

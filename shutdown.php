@@ -1,4 +1,5 @@
 <?php
+require_once 'core/startup/clear_clipboard.php';
 session_start();
 echo "<script>";
 echo "localStorage.removeItem('user_id');";
