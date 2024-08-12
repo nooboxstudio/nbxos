@@ -298,10 +298,6 @@ loadFolder('desktop');
 
 /*########################################################################################################*/
 
-
-    // Inicializa com a pasta 'desktop'
-    loadFolder('desktop');
-
     // Adiciona event listeners para clicar nas pastas da barra lateral
     const sidebarLinks = document.querySelectorAll('.sidebar a');
     sidebarLinks.forEach(link => {
@@ -323,17 +319,19 @@ loadFolder('desktop');
 /*########################################################################################################*/
     document.getElementById('new-file').addEventListener('click', function(event) {
         event.preventDefault();
-        const fileName = "Novo Arquivo.txt";
+        const fileName = "Novo Arquivo";
+        const fileextension = ".txt";
         if (fileName) {
-            createNewItem('file', fileName);
+            createNewItem('file', fileName+fileextension);
         }
     });
     
     document.getElementById('new-html').addEventListener('click', function(event) {
         event.preventDefault();
-        const fileName = "Novo Arquivo.html";
+        const fileName = "Novo Arquivo";
+        const fileextension = ".html";
         if (fileName) {
-            createNewItem('file', fileName);
+            createNewItem('file', fileName+fileextension);
         }
     });
 /*########################################################################################################*/

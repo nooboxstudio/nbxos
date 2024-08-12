@@ -27,23 +27,33 @@ a{
 .toolbar .toolbar-item{
     color: #fff;
     height: 30px;
+    background-color: #191919;
     min-width: 30px;
     width: auto;
-    float: left;
-    position: relative;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    cursor: pointer;
+    border:#191919 solid 1px; 
 }
-
 .toolbar .toolbar-item button{
     background-color: #191919;
     border: none;
-    margin: 5px;
 }
+.toolbar .toolbar-item:hover{
+    border:#2a2a2a solid 1px; 
+    border-radius: 5px;
+}
+
 
 
 /* Estilo do menu drop-down */
 .dropdown {
     position: relative;
     display: inline-block;
+    padding: 0 5px;
   }
   
   button .dropbtn {
@@ -58,30 +68,28 @@ a{
   .dropdown-content {
     display: none;
     position: absolute;
-    background-color: #f9f9f9;
+    background-color: #2a2a2a;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     z-index: 1;
     min-width: 160px;
+    color: #fff;
   }
   
   .dropdown-content a {
-    color: black;
+    color: #fff;
     padding: 12px 16px;
     text-decoration: none;
     display: block;
   }
   
   .dropdown-content a:hover {
-    background-color: #f1f1f1;
+    background-color: #191919;
   }
   
   .dropdown:hover .dropdown-content {
     display: block;
   }
   
-  .dropdown:hover .dropbtn {
-    background-color: #3e8e41;
-  }
   
 
 
@@ -203,7 +211,7 @@ a{
 
 /*Lista de itens na view*/
 
-.content{
+.view{
     width: calc(100% - 282px);
     height: calc(100% - 82px);
     float: left;
@@ -214,11 +222,24 @@ a{
     padding: 20px;
     display: flex;
     flex-direction: row;
-    align-items: start;
-    justify-content: start;
+    align-items: flex-start;
+    justify-content: flex-start;
     gap: 30px;
     flex-wrap: wrap;
     overflow-y: scroll;
+}
+
+.content{
+    width: 100%;
+    min-height: 200px;
+    height: auto;
+    gap: 30px;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 30px;
+    flex-wrap: wrap;
 }
 
 .item-view {
