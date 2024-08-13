@@ -101,7 +101,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Habilita os botões de ação
         document.getElementById('rename-button').disabled = false;
         document.getElementById('delete-button').disabled = false;
-        document.getElementById('move-button').disabled = false;
+        document.getElementById('paste-button').disabled = false;
         document.getElementById('copy-button').disabled = false;
         document.getElementById('cut-button').disabled = false;
     }
@@ -115,7 +115,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // Desabilita os botões de ação
             document.getElementById('rename-button').disabled = true;
             document.getElementById('delete-button').disabled = true;
-            document.getElementById('move-button').disabled = true;
+            document.getElementById('paste-button').disabled = true;
             document.getElementById('copy-button').disabled = true;
             document.getElementById('cut-button').disabled = true;
         }
@@ -326,14 +326,6 @@ loadFolder('desktop');
         }
     });
     
-    document.getElementById('new-html').addEventListener('click', function(event) {
-        event.preventDefault();
-        const fileName = "Novo Arquivo";
-        const fileextension = ".html";
-        if (fileName) {
-            createNewItem('file', fileName+fileextension);
-        }
-    });
 /*########################################################################################################*/
     // Adiciona event listeners para os botões de ação
     document.getElementById('delete-button').addEventListener('click', function(event) {
@@ -352,7 +344,8 @@ loadFolder('desktop');
         pasteItem();
     });
 /*########################################################################################################*/
-    document.getElementById('cut-button').addEventListener('click', function() {
+    document.getElementById('cut-button').addEventListener('click', function(event) {
+            event.preventDefault();
         cutItem();
     });
  
