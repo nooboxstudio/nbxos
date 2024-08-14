@@ -96,54 +96,6 @@ document.addEventListener('DOMContentLoaded', function() {
             });
     }
     
-/*########################################################################################################*/
-function openTextEditor(filePath) {
-    fetch(`./assets/php/read_file.php?file=${encodeURIComponent(filePath)}`)
-        .then(response => response.text())
-        .then(content => {
-            const editorWindow = window.open('', '', 'width=600,height=400');
-            editorWindow.document.write(`
-                <html>
-                <head>
-                    <title>Editor de Texto - ${filePath}</title>
-                    <style>
-                        body { font-family: Arial, sans-serif; padding: 10px; margin: 0; }
-                        textarea { width: 100%; height: 90%; }
-                        button { margin-top: 10px; }
-                    </style>
-                </head>
-                <body>
-                    <h2>${filePath}</h2>
-                    <textarea id="fileContent">${content}</textarea>
-                    <button onclick="window.opener.saveTextFile('${filePath}', document.getElementById('fileContent').value)">Salvar</button>
-                </body>
-                </html>
-            `);
-        })
-        .catch(error => console.error('Erro ao abrir o arquivo:', error));
-}
-
-// Função para salvar o conteúdo do editor de texto
-function saveFile(content, filePath) {
-    fetch('./assets/php/save_file.php', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        body: `file=${encodeURIComponent(filePath)}&content=${encodeURIComponent(content)}`
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            alert('Arquivo salvo com sucesso!');
-        } else {
-            alert(`Erro ao salvar o arquivo: ${data.error}`);
-        }
-    })
-    .catch(error => {
-        console.error('Erro ao salvar o arquivo:', error);
-    });
-}
 
 /*########################################################################################################*/
     // Função para selecionar um item

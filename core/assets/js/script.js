@@ -77,7 +77,6 @@ function openAppWindowFromLink(link) {
 
 
 
-
 function openAppWindow(app, appPath) {
     const desktop = document.getElementById('desktop');
 
@@ -212,130 +211,9 @@ function minimizeApp(appWindow) {
     }
 }
 
-
-
-
-// Função para abrir a janela do perfil
-function openProfileWindow() {
-    const desktop = document.getElementById('desktop');
-
-    // Verifica se já existe uma instância da janela do perfil aberta
-    let existingWindow = openAppWindows.find(win => win.appname === 'Profile');
-    if (existingWindow) {
-        if (existingWindow.minimized) {
-            restoreApp(existingWindow.window);
-        }
-        return;
-    }
-
-    // Cria uma nova janela na área de desktop para o perfil
-    const profileWindow = document.createElement('div');
-    profileWindow.classList.add('app-window');
-    profileWindow.setAttribute('data-appname', 'Profile'); // Adiciona um atributo para identificação
-    profileWindow.style.zIndex = highestZIndex++; // Define o z-index e incrementa a variável
-
-    // Cria a barra de título da janela do perfil
-    const titleBar = document.createElement('div');
-    titleBar.classList.add('title-bar');
-
-    // Ícone do perfil
-    const icon = document.createElement('img');
-    icon.src = 'core/systemapps/profile/img/icon.png'; // Caminho para o ícone do perfil
-    icon.alt = 'Profile';
-    icon.classList.add('app-icon'); // Adicione uma classe se precisar de estilos específicos
-    titleBar.appendChild(icon);
-
-    // Título da janela do perfil
-    const title = document.createElement('span');
-    title.textContent = 'Profile';
-    title.classList.add('title');
-    titleBar.appendChild(title);
-
-    // Botões de controle (minimizar, maximizar, fechar)
-    const controls = document.createElement('div');
-    controls.classList.add('controls');
-
-    // Botão Minimizar (opcional para o perfil)
-    const minimizeButton = document.createElement('button');
-    minimizeButton.textContent = '_';
-    minimizeButton.classList.add('minimize-button');
-    minimizeButton.addEventListener('click', () => {
-        minimizeApp(profileWindow);
-    });
-    controls.appendChild(minimizeButton);
-
-    // Botão Maximizar (opcional para o perfil)
-    const maximizeButton = document.createElement('button');
-    maximizeButton.textContent = '+';
-    maximizeButton.classList.add('maximize-button');
-    maximizeButton.addEventListener('click', () => {
-        maximizeApp(profileWindow);
-    });
-    controls.appendChild(maximizeButton);
-
-    // Botão Fechar
-    const closeButton = document.createElement('button');
-    closeButton.textContent = 'X';
-    closeButton.classList.add('close-button');
-    closeButton.addEventListener('click', () => {
-        closeApp(profileWindow, { appname: 'Profile' }); // Passe um objeto simulado para corresponder à estrutura esperada
-    });
-    controls.appendChild(closeButton);
-
-    titleBar.appendChild(controls);
-    profileWindow.appendChild(titleBar);
-
-    const appContent = document.createElement('iframe');
-    appContent.src = 'core/systemapps/profile'; // Caminho personalizado para o aplicativo
-    appContent.width = '100%';
-    appContent.height = 'calc(100% - 30px)'; // Ajusta a altura descontando a altura da barra de título
-    appContent.style.border = 'none';
-    // Adiciona o conteúdo do aplicativo à janela
-    profileWindow.appendChild(appContent);
-
-    // Adiciona a janela do perfil à área de desktop
-    desktop.appendChild(profileWindow);
-
-    // Redimensionamento da janela do perfil (opcional)
-    makeResizable(profileWindow);
-
-    // Movimentação da janela do perfil
-    makeDraggable(profileWindow, titleBar);
-
-    // Adiciona a referência da janela do perfil aberta ao array
-    openAppWindows.push({
-        appname: 'Profile',
-        window: profileWindow,
-        minimized: false,
-        maximized: false,
-        previousSize: null
-    });
-
-    // Adiciona o ícone na barra de tarefas (opcional para o perfil)
-    addTaskbarIcon('Profile', 'core/systemapps/profile/img/icon.png');
-
-    // Atualiza o user.json com as janelas abertas (opcional)
-    updateOpenWindowsInJson();
-
-    // Adiciona evento para trazer a janela do perfil para frente ao clicar nela
-    profileWindow.addEventListener('mousedown', () => {
-        bringToFront(profileWindow);
-    });
-}
-
-// Inicialização: Adicione o listener para abrir a janela do perfil ao carregar o DOM
-document.addEventListener('DOMContentLoaded', () => {
-    const profileDiv = document.getElementById('profile');
-    if (profileDiv) {
-        profileDiv.addEventListener('click', (event) => {
-            event.preventDefault();
-            openProfileWindow();
-        });
-    }
-});
-
-
-// Função para adicionar ícone do aplicativo na barra de tarefas
+/*#############################################################################
+# Função para adicionar ícone do aplicativo na barra de tarefas
+##############################################################################*/ 
 function addTaskbarIcon(appname, iconSrc) {
     const taskbarApps = document.getElementById('taskbar-apps');
 
@@ -1070,17 +948,3 @@ document.addEventListener('DOMContentLoaded', () => {
 /*####################### FIM DO EXPLORADOR DE ARQUIVOS########################################*/
 
 
-/*#################### OPEN TEXT EDITOR #######################################################*/
-function openTextEditor(filePath) {
-    fetch(filePath)
-        .then(response => response.text())
-        .then(data => {
-            const editor = document.querySelector('.editor textarea');
-            editor.value = data; // Carrega o conteúdo do arquivo no editor
-            editor.setAttribute('data-file-path', filePath); // Armazena o caminho do arquivo para salvar depois
-        })
-        .catch(error => console.error('Erro ao carregar o arquivo:', error));
-}
-
-
-/*#################### OPEN TEXT EDITOR END ####################################################*/
