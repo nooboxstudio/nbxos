@@ -77,6 +77,15 @@ document.addEventListener('DOMContentLoaded', function() {
                         itemView.addEventListener('click', function() {
                             selectItem(this);
                         });
+
+                        itemView.addEventListener('dblclick', function() {
+                            const fileType = item.name.split('.').pop().toLowerCase();
+                            if (fileType === 'txt' || fileType === 'css') {
+                                openTextEditor(folder + '/' + item.name);
+                            } else {
+                                alert('Este tipo de arquivo não pode ser aberto no editor de texto.');
+                            }
+                        });
                     }
 
                     contentDiv.appendChild(itemView);
@@ -86,6 +95,52 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.error('Erro ao carregar a pasta:', error);
             });
     }
+    
+/*########################################################################################################*/
+function openTextEditor(filePath) {
+    fetch(`read_file.php?file=${encodeURIComponent(filePath)}`)
+        .then(response => response.text())
+        .then(content => {
+            const editorWindow = window.open('', '', 'width=600,height=400');
+            editorWindow.document.write(`
+                <html>
+                <head>
+                    <title>Editor de Texto - ${filePath}</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; padding: 10px; margin: 0; }
+                        textarea { width: 100%; height: 90%; }
+                        button { margin-top: 10px; }
+                    </style>
+                </head>
+                <body>
+                    <h2>${filePath}</h2>
+                    <textarea id="fileContent">${content}</textarea>
+                    <button onclick="window.opener.saveTextFile('${filePath}', document.getElementById('fileContent').value)">Salvar</button>
+                </body>
+                </html>
+            `);
+        })
+        .catch(error => console.error('Erro ao abrir o arquivo:', error));
+}
+
+// Função para salvar o conteúdo do editor de texto
+window.saveTextFile = function(filePath, content) {
+    fetch('./assets/php/save_file.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ filePath: filePath, content: content })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Arquivo salvo com sucesso.');
+        } else {
+            alert(`Erro ao salvar arquivo: ${data.error}`);
+        }
+    })
+    .catch(error => console.error('Erro ao salvar arquivo:', error));
+};
+
 /*########################################################################################################*/
     // Função para selecionar um item
     function selectItem(item) {
@@ -379,12 +434,10 @@ loadFolder('desktop');
     });
  
 /*########################################################################################################*/
-/* document.getElementById('restore-button').addEventListener('click', function(event) {
-    event.preventDefault();
-    restoreItem();
-});*/
-
-
+// Bloqueia o clique direito na página inteira
+document.addEventListener('contextmenu', function(event) {
+    event.preventDefault(); // Previne a ação padrão (exibir o menu de contexto)
+});
 
 /*######################################## CHAMA AS FUNÇÃO AO PRESSIONAR OS BOTÕES ################################################################*/
 document.addEventListener('keydown', function(event) {

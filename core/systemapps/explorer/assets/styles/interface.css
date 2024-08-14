@@ -12,7 +12,7 @@ a{
 .toolbar{
     width: calc(100% - 20px);
     height: 30px;
-    background-color: #191919;
+    background-color: #0c0c0c;
     border-bottom: #2a2a2a solid 2px;
     padding: 5px 10px;
     display: flex;
@@ -27,7 +27,6 @@ a{
 .toolbar .toolbar-item{
     color: #fff;
     height: 30px;
-    background-color: #191919;
     min-width: 30px;
     width: auto;
     display: flex;
@@ -36,14 +35,21 @@ a{
     justify-content: center;
     gap: 10px;
     cursor: pointer;
-    border:#191919 solid 1px; 
-}
-.toolbar .toolbar-item button{
-    background-color: #191919;
-    border: none;
+    border:#0c0c0c solid 1px; 
+    background-color: #0c0c0c;
+    border-radius: 5px;
 }
 .toolbar .toolbar-item button{
     cursor: pointer;
+    background-color: #0c0c0c;
+    border: none;
+    border-radius: 5px;
+}
+.toolbar .toolbar-item button img{
+    cursor: pointer;
+    background-color: #0c0c0c;
+    border: none;
+    border-radius: 5px;
 }
 
 .toolbar .toolbar-item button:hover{
@@ -272,3 +278,27 @@ a{
     font-size: 14px;
 }
 
+/*########################### menu de contexto por item #######################################*/
+
+.context-menu-item {
+    display: none;
+    position: absolute;
+    background-color: white;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  }
+  
+  .context-menu-item ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .context-menu-item ul li {
+    padding: 8px 12px;
+    cursor: pointer;
+  }
+  
+  .context-menu-item ul li:hover {
+    background-color: #f0f0f0;
+  }
