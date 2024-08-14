@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function openAppWindowFromLink(link) {
     const filePath = link.getAttribute('href');
-    if (filePath.endsWith('.txt')) {
+    if (filePath.endsWith('.txt') || filePath.endsWith('.css')) {
         openTextEditor(filePath);
     } else {
         const appPath = link.getAttribute('href');
@@ -74,6 +74,7 @@ function openAppWindowFromLink(link) {
             .catch(error => console.error('Erro ao carregar o manifest.json da aplicação:', error));
     }
 }
+
 
 
 

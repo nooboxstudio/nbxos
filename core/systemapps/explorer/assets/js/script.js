@@ -98,7 +98,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
 /*########################################################################################################*/
 function openTextEditor(filePath) {
-    fetch(`read_file.php?file=${encodeURIComponent(filePath)}`)
+    fetch(`./assets/php/read_file.php?file=${encodeURIComponent(filePath)}`)
         .then(response => response.text())
         .then(content => {
             const editorWindow = window.open('', '', 'width=600,height=400');
@@ -124,22 +124,26 @@ function openTextEditor(filePath) {
 }
 
 // Função para salvar o conteúdo do editor de texto
-window.saveTextFile = function(filePath, content) {
+function saveFile(content, filePath) {
     fetch('./assets/php/save_file.php', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ filePath: filePath, content: content })
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: `file=${encodeURIComponent(filePath)}&content=${encodeURIComponent(content)}`
     })
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            alert('Arquivo salvo com sucesso.');
+            alert('Arquivo salvo com sucesso!');
         } else {
-            alert(`Erro ao salvar arquivo: ${data.error}`);
+            alert(`Erro ao salvar o arquivo: ${data.error}`);
         }
     })
-    .catch(error => console.error('Erro ao salvar arquivo:', error));
-};
+    .catch(error => {
+        console.error('Erro ao salvar o arquivo:', error);
+    });
+}
 
 /*########################################################################################################*/
     // Função para selecionar um item
