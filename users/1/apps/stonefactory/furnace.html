@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stonefactory</title>
+	<link rel="shortcut icon" href="assets/icons/ui/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="assets/style/game.css">
+</head>
+<body>
+<!-- Setor do topo-->
+<div class="header">
+    <div class="w20"></div>
+    <div class="w60 center">
+        <img src="assets/icons/ui/furnace.png" width="180" style="margin-top: 20px;" alt="inventory">
+    </div>
+    <div class="w20">
+        <button class="btn-profile" onclick="window.location.href = 'profile.html'" title="profile"></button>
+    </div>
+    <div class="w80 money-section">
+        <img src="assets/icons/ui/money.png" width="32" alt=""><br>
+        <div class="money">
+            <span id="money"></span>
+        </div>
+    </div>
+</div>
+
+<button class="menu-open" id="showButton"></button>
+
+<div class="body" id="hideButton">
+    <nav class="menu">
+        <ul>
+            <li onclick="window.location.href = 'index.html'">
+                <img src="assets/icons/ui/home.png" width="30" alt="Shop">
+                <span>Home</span>
+            </li>
+            <li onclick="window.location.href = 'inventory.html'">
+                <img src="assets/icons/ui/backpack.png" width="30" alt="Shop">
+                <span>Inventory</span>
+            </li>
+            <li onclick="window.location.href = 'shop.html'">
+                <img src="assets/icons/ui/store.png" width="30" alt="Shop">
+                <span>Shop</span>
+            </li>
+            <li onclick="window.location.href = 'furnace.html'">
+                <img src="assets/icons/ui/oven.png" width="32" alt="Oven">
+                <span>Furnace</span>
+            </li>
+            <li onclick="window.location.href = 'factory.html'">
+                <img src="assets/icons/ui/factory.png" width="32" alt="industry">
+                <span>Factory</span>
+            </li>
+        </ul>
+    </nav>
+    <button class="menu-close" id="hideButton"></button>
+</div>
+<div id="content">
+    <div id="page" class="furnace">
+        <div class="row-furnace">
+            <div class="furnace-card" onclick="smeltStone()">
+                <div class="in">
+                    <img src="assets/icons/itens/raw/cobblestone.png" alt="">
+                    <span id="cobblestone"></span>
+                </div>
+                <div class="process">
+                    
+                </div>
+                <div class="out">
+                    <img src="assets/icons/itens/ingot/stone.png" alt="">
+                    <span id="stone"></span>
+                </div>
+            </div>
+
+            <div class="furnace-card" onclick="smeltIron()">
+                <div class="in">
+                    <img src="assets/icons/itens/raw/raw_iron.png" alt="">
+                    <span id="rawIron"></span>
+                </div>
+                <div class="process">
+                    
+                </div>
+                <div class="out">
+                    <img src="assets/icons/itens/ingot/iron_ingot.png" alt="">
+                    <span id="ironIngot"></span>
+                </div>
+            </div>
+
+            <div class="furnace-card" onclick="smeltTin()">
+                <div class="in">
+                    <img src="assets/icons/itens/raw/raw_tin.png" alt="">
+                    <span id="rawTin"></span>
+                </div>
+                <div class="process">
+                    
+                </div>
+                <div class="out">
+                    <img src="assets/icons/itens/ingot/tin_ingot.png" alt="">
+                    <span id="tinIngot"></span>
+                </div>
+            </div>
+
+            <div class="furnace-card" onclick="smeltCopper()">
+                <div class="in">
+                    <img src="assets/icons/itens/raw/raw_copper.png" alt="">
+                    <span id="rawCopper"></span>
+                </div>
+                <div class="process">
+                    
+                </div>
+                <div class="out">
+                    <img src="assets/icons/itens/ingot/copper_ingot.png" alt="">
+                    <span id="copperIngot"></span>
+                </div>
+            </div>
+
+            <div class="furnace-card" onclick="smeltLead()">
+                <div class="in">
+                    <img src="assets/icons/itens/raw/raw_lead.png" alt="">
+                    <span id="rawLead"></span>
+                </div>
+                <div class="process">
+                    
+                </div>
+                <div class="out">
+                    <img src="assets/icons/itens/ingot/lead_ingot.png" alt="">
+                    <span id="leadIngot"></span>
+                </div>
+            </div>
+
+            <div class="furnace-card" onclick="smeltZinc()">
+                <div class="in">
+                    <img src="assets/icons/itens/raw/raw_zinc.png" alt="">
+                    <span id="rawZinc"></span>
+                </div>
+                <div class="process">
+                    
+                </div>
+                <div class="out">
+                    <img src="assets/icons/itens/ingot/zinc_ingot.png" alt="">
+                    <span id="zincIngot"></span>
+                </div>
+            </div>
+
+            <div class="furnace-card" onclick="smeltNickel()">
+                <div class="in">
+                    <img src="assets/icons/itens/raw/raw_nickel.png" alt="">
+                    <span id="rawNickel"></span>
+                </div>
+                <div class="process">
+                    
+                </div>
+                <div class="out">
+                    <img src="assets/icons/itens/ingot/nickel_ingot.png" alt="">
+                    <span id="nickelIngot"></span>
+                </div>
+            </div>
+
+            <div class="furnace-card" onclick="smeltGold()">
+                <div class="in">
+                    <img src="assets/icons/itens/raw/raw_gold.png" alt="">
+                    <span id="rawGold"></span>
+                </div>
+                <div class="process">
+                    
+                </div>
+                <div class="out">
+                    <img src="assets/icons/itens/ingot/gold_ingot.png" alt="">
+                    <span id="goldIngot"></span>
+                </div>
+            </div>
+
+            <div class="furnace-card" onclick="smeltPlatinum()">
+                <div class="in">
+                    <img src="assets/icons/itens/raw/raw_platinum.png" alt="">
+                    <span id="rawPlatinum"></span>
+                </div>
+                <div class="process">
+                    
+                </div>
+                <div class="out">
+                    <img src="assets/icons/itens/ingot/platinum_ingot.png" alt="">
+                    <span id="platinumIngot"></span>
+                </div>
+            </div>
+
+            <div class="furnace-card" onclick="smeltDiamond()">
+                <div class="in">
+                    <img src="assets/icons/itens/raw/raw_diamond.png" alt="">
+                    <span id="rawDiamond"></span>
+                </div>
+                <div class="process">
+                    
+                </div>
+                <div class="out">
+                    <img src="assets/icons/itens/ingot/diamond.png" alt="">
+                    <span id="diamond"></span>
+                </div>
+            </div>
+
+            <div class="furnace-card" onclick="smeltEmerald()">
+                <div class="in">
+                    <img src="assets/icons/itens/raw/raw_emerald.png" alt="">
+                    <span id="rawEmerald"></span>
+                </div>
+                <div class="process">
+                    
+                </div>
+                <div class="out">
+                    <img src="assets/icons/itens/ingot/emerald.png" alt="">
+                    <span id="emerald"></span>
+                </div>
+            </div>
+
+            <div class="furnace-card" onclick="smeltObsidian()">
+                <div class="in">
+                    <img src="assets/icons/itens/raw/raw_obsidian.png" alt="">
+                    <span id="rawObsidian"></span>
+                </div>
+                <div class="process">
+                    
+                </div>
+                <div class="out">
+                    <img src="assets/icons/itens/ingot/obsidian.png" alt="">
+                    <span id="obsidian"></span>
+                </div>
+            </div>
+            
+
+
+
+        </div>
+    </div>
+</div>
+<div class="footer">
+    <div class="w20 center">
+        <button class="bottomButtom"onclick="window.location.href = 'shop.html'"><img src="assets/icons/ui/store.png" width="48" alt=""></button>
+    </div>
+    <div class="w60 center">
+        <button class="actionButton" onmousedown="smeltAllStart()" onmouseup="smeltAllEnd()" onclick="smeltAll()">
+            <img src="assets/icons/ui/oven.png" width="56" alt="smelt" id="tool">
+        </button>
+    </div>
+    <div class="w20 center">
+        <button class="bottomButtom"onclick="window.location.href = 'inventory.html'"><img src="assets/icons/ui/backpack.png" width="48" alt=""></button>
+    </div>
+</div>
+    <script src="assets/scripts/game.settings.js"></script>
+    <script src="assets/scripts/mining.js"></script>
+    <script src="assets/scripts/shop.buy.js"></script>
+    <script src="assets/scripts/shop.sale.js"></script>
+    <script src="assets/scripts/furnace.js"></script>
+    <script src="assets/scripts/factory.js"></script>
+    <script>
+        const showButton = document.getElementById('showButton');
+        const hideButton = document.getElementById('hideButton');
+        const bodyDiv = document.querySelector('.body');
+
+        showButton.addEventListener('click', function() {
+            bodyDiv.style.display = 'block'; // Exibir a div.body
+        });
+
+        hideButton.addEventListener('click', function() {
+            bodyDiv.style.display = 'none'; // Esconder a div.body
+        });
+
+    </script>
+</body>
+</html>

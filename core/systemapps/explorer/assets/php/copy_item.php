@@ -36,7 +36,27 @@ if (!is_dir($clipboardDir)) {
     mkdir($clipboardDir, 0777, true);
 }
 
-// Copia o arquivo ou pasta para o clipboard
+// Função para gerar um caminho único para evitar conflitos
+function generateUniquePath($baseDir, $path) {
+    $fileInfo = pathinfo($path);
+    $baseName = $fileInfo['filename'];
+    $extension = isset($fileInfo['extension']) ? '.' . $fileInfo['extension'] : '';
+    $counter = 1;
+
+    $fullPath = $baseDir . '/' . $path;
+
+    while (file_exists($fullPath)) {
+        $newBaseName = $baseName . '(' . $counter . ')' . $extension;
+        $fullPath = $baseDir . '/' . $fileInfo['dirname'] . '/' . $newBaseName;
+        $counter++;
+    }
+
+    return $fullPath;
+}
+
+// Define o caminho de destino único
+$destinationPath = generateUniquePath($clipboardDir, basename($sourcePath));
+
 try {
     if (is_file($sourcePath)) {
         copy($sourcePath, $destinationPath);
@@ -63,3 +83,4 @@ function recursiveCopy($src, $dst) {
     }
     closedir($dir);
 }
+?>

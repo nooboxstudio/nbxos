@@ -44,6 +44,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $user_directory = "users/" . $user_id;
                 if (!file_exists($user_directory)) {
                     mkdir($user_directory, 0777, true);
+                    mkdir($user_directory.'/clipboard', 0777, true);
+                    mkdir($user_directory.'/trash-inf', 0777, true);
+                    mkdir($user_directory.'/apps', 0777, true);
+                    mkdir($user_directory.'/userfiles/desktop', 0777, true);
+                    mkdir($user_directory.'/userfiles/documents', 0777, true);
+                    mkdir($user_directory.'/userfiles/images', 0777, true);
+                    mkdir($user_directory.'/userfiles/musics', 0777, true);
+                    mkdir($user_directory.'/userfiles/trash', 0777, true);
+                    mkdir($user_directory.'/userfiles/videos', 0777, true);
                 }
                 $_SESSION['message'] = 'Registrado com sucesso!';
                 header("Location: login");

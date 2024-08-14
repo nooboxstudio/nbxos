@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stonefactory</title>
+	<link rel="shortcut icon" href="assets/icons/ui/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="assets/style/game.css">
+</head>
+<body>
+<!-- Setor do topo-->
+<div class="header">
+    <div class="w20"></div>
+    <div class="w60 center">
+        <img src="assets/icons/ui/inventory.png" width="220" style="margin-top: 20px;" alt="inventory">
+    </div>
+    <div class="w20">
+        <button class="btn-profile" onclick="window.location.href = 'profile.html'" title="profile"></button>
+    </div>
+    <div class="w80 money-section">
+        <img src="assets/icons/ui/money.png" width="32" alt=""><br>
+        <div class="money">
+            <span id="money"></span>
+        </div>
+    </div>
+</div>
+
+<button class="menu-open" id="showButton"></button>
+
+<div class="body" id="hideButton">
+    <nav class="menu">
+        <ul>
+            <li onclick="window.location.href = 'index.html'">
+                <img src="assets/icons/ui/home.png" width="30" alt="Shop">
+                <span>Home</span>
+            </li>
+            <li onclick="window.location.href = 'inventory.html'">
+                <img src="assets/icons/ui/backpack.png" width="30" alt="Shop">
+                <span>Inventory</span>
+            </li>
+            <li onclick="window.location.href = 'shop.html'">
+                <img src="assets/icons/ui/store.png" width="30" alt="Shop">
+                <span>Shop</span>
+            </li>
+            <li onclick="window.location.href = 'furnace.html'">
+                <img src="assets/icons/ui/oven.png" width="32" alt="Oven">
+                <span>Furnace</span>
+            </li>
+            <li onclick="window.location.href = 'factory.html'">
+                <img src="assets/icons/ui/factory.png" width="32" alt="industry">
+                <span>Factory</span>
+            </li>
+        </ul>
+    </nav>
+    <button class="menu-close" id="hideButton"></button>
+</div>
+
+
+
+<div id="content">
+<div id="page" class="backpack">   
+<!-- homepage-->
+<!-- ROW ITENS-->
+    <div class="row-itens">
+        <div class="card">
+            <div class="card-header">
+                Cobblestone
+                <span onclick="saleCobblestone()">
+                    
+                </span>
+            </div>
+            <div class="card-body">
+                <img src="assets/icons/itens/raw/cobblestone.png" width="60" alt="">
+                
+            </div>
+            <div class="card-footer">
+                <span id="cobblestone"></span>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                Raw Iron
+                <span onclick="saleRawIron()"></span>
+            </div>
+            <div class="card-body">
+                <img src="assets/icons/itens/raw/raw_iron.png" width="60" alt="">
+                
+            </div>
+            <div class="card-footer">
+                <span id="rawIron"></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header">
+                Raw Tin
+                <span onclick="saleRawTin()"></span>
+            </div>
+            <div class="card-body">
+                <img src="assets/icons/itens/raw/raw_tin.png" width="60" alt="">
+                
+            </div>
+            <div class="card-footer">
+                <span id="rawTin"></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header">
+                Raw Copper
+                <span onclick="saleRawCopper()"></span>
+            </div>
+            <div class="card-body">
+                <img src="assets/icons/itens/raw/raw_copper.png" width="60" alt="">
+                
+            </div>
+            <div class="card-footer">
+                <span id="rawCopper"></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header">
+                Raw Lead
+                <span onclick="saleRawLead()"></span>
+            </div>
+            <div class="card-body">
+                <img src="assets/icons/itens/raw/raw_lead.png" width="60" alt="">
+                
+            </div>
+            <div class="card-footer">
+                <span id="rawLead"></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header">
+                Raw Zinc
+                <span onclick="saleRawZinc()"></span>
+            </div>
+            <div class="card-body">
+                <img src="assets/icons/itens/raw/raw_zinc.png" width="60" alt="">
+                
+            </div>
+            <div class="card-footer">
+                <span id="rawZinc"></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header">
+                Raw Nickel
+                <span onclick="saleRawNickel()"></span>
+            </div>
+            <div class="card-body">
+                <img src="assets/icons/itens/raw/raw_nickel.png" width="60" alt="">
+                
+            </div>
+            <div class="card-footer">
+                <span id="rawNickel"></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header">
+                Raw Gold
+                <span onclick="saleRawGold()"></span>
+            </div>
+            <div class="card-body">
+                <img src="assets/icons/itens/raw/raw_gold.png" width="60" alt="">
+                
+            </div>
+            <div class="card-footer">
+                <span id="rawGold"></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header">
+                Raw Platinum
+                <span onclick="salerawPlatinum()"></span>
+            </div>
+            <div class="card-body">
+                <img src="assets/icons/itens/raw/raw_platinum.png" width="60" alt="">
+                
+            </div>
+            <div class="card-footer">
+                <span id="rawPlatinum"></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header">
+                Raw Diamond
+                <span onclick="saleRawDiamond()"></span>
+            </div>
+            <div class="card-body">
+                <img src="assets/icons/itens/raw/raw_diamond.png" width="60" alt="">
+                
+            </div>
+            <div class="card-footer">
+                <span id="rawDiamond"></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header">
+                Raw Emerald
+                <span onclick="saleRawEmerald()"></span>
+            </div>
+            <div class="card-body">
+                <img src="assets/icons/itens/raw/raw_emerald.png" width="60" alt="">
+                
+            </div>
+            <div class="card-footer">
+                <span id="rawEmerald"></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header">
+                Raw Obsidian
+                <span onclick="saleRawObsidian()"></span>
+            </div>
+            <div class="card-body">
+                <img src="assets/icons/itens/raw/raw_obsidian.png" width="60" alt="">
+                
+            </div>
+            <div class="card-footer">
+                <span id="rawObsidian"></span>
+            </div>
+        </div>
+        
+    
+    <div class="card">
+        <div class="card-header">
+            Stone
+            <span onclick="saleStone()">
+                
+            </span>
+        </div>
+        <div class="card-body">
+            <img src="assets/icons/itens/ingot/stone.png" width="60" alt="">
+            
+        </div>
+        <div class="card-footer">
+            <span id="stone"></span>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            Iron Ingot
+            <span onclick="saleIronIngot()">
+                
+            </span>
+        </div>
+        <div class="card-body">
+            <img src="assets/icons/itens/ingot/iron_ingot.png" width="60" alt="">
+            
+        </div>
+        <div class="card-footer">
+            <span id="ironIngot"></span>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            Tin Ingot
+            <span onclick="saleTinIngot()">
+                
+            </span>
+        </div>
+        <div class="card-body">
+            <img src="assets/icons/itens/ingot/tin_ingot.png" width="60" alt="">
+            
+        </div>
+        <div class="card-footer">
+            <span id="tinIngot"></span>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            Copper Ingot
+            <span onclick="saleCopperIngot()">
+                
+            </span>
+        </div>
+        <div class="card-body">
+            <img src="assets/icons/itens/ingot/copper_ingot.png" width="60" alt="">
+            
+        </div>
+        <div class="card-footer">
+            <span id="copperIngot"></span>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            Lead Ingot
+            <span onclick="saleLeadIngot()">
+                
+            </span>
+        </div>
+        <div class="card-body">
+            <img src="assets/icons/itens/ingot/lead_ingot.png" width="60" alt="">
+            
+        </div>
+        <div class="card-footer">
+            <span id="leadIngot"></span>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            Zinc Ingot
+            <span onclick="saleZincIngot()">
+                
+            </span>
+        </div>
+        <div class="card-body">
+            <img src="assets/icons/itens/ingot/zinc_ingot.png" width="60" alt="">
+            
+        </div>
+        <div class="card-footer">
+            <span id="zincIngot"></span>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            Nickel Ingot
+            <span onclick="saleNickelIngot()">
+                
+            </span>
+        </div>
+        <div class="card-body">
+            <img src="assets/icons/itens/ingot/nickel_ingot.png" width="60" alt="">
+            
+        </div>
+        <div class="card-footer">
+            <span id="nickelIngot"></span>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            Gold Ingot
+            <span onclick="saleGoldIngot()">
+                
+            </span>
+        </div>
+        <div class="card-body">
+            <img src="assets/icons/itens/ingot/gold_ingot.png" width="60" alt="">
+            
+        </div>
+        <div class="card-footer">
+            <span id="goldIngot"></span>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            Platinum Ingot
+            <span onclick="salePlatinumIngot()">
+                
+            </span>
+        </div>
+        <div class="card-body">
+            <img src="assets/icons/itens/ingot/platinum_ingot.png" width="60" alt="">
+            
+        </div>
+        <div class="card-footer">
+            <span id="platinumIngot"></span>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            Dimond
+            <span onclick="saleDiamond()">
+                
+            </span>
+        </div>
+        <div class="card-body">
+            <img src="assets/icons/itens/ingot/diamond.png" width="60" alt="">
+            
+        </div>
+        <div class="card-footer">
+            <span id="diamond"></span>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            Emerald
+            <span onclick="saleEmerald()">
+                
+            </span>
+        </div>
+        <div class="card-body">
+            <img src="assets/icons/itens/ingot/emerald.png" width="60" alt="">
+            
+        </div>
+        <div class="card-footer">
+            <span id="emerald"></span>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            Obsidian
+            <span onclick="saleObsidian()">
+                
+            </span>
+        </div>
+        <div class="card-body">
+            <img src="assets/icons/itens/ingot/obsidian.png" width="60" alt="">
+            
+        </div>
+        <div class="card-footer">
+            <span id="obsidian"></span>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            Iron Plate
+        </div>
+        <div class="card-body">
+            <img src="assets/icons/itens/plate/iron.png" width="60" alt="">
+            
+        </div>
+        <div class="card-footer">
+            <span id="ironPlate"></span>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            Iron Gear
+        </div>
+        <div class="card-body">
+            <img src="assets/icons/itens/gear/iron.png" width="60" alt="">
+        </div>
+        <div class="card-footer">
+            <span id="ironGear"></span>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            Iron Casing
+        </div>
+        <div class="card-body">
+            <img src="assets/icons/itens/casing/iron.png" width="60" alt="">
+        </div>
+        <div class="card-footer">
+            <span id="ironCasing"></span>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header">
+            Chip T1
+        </div>
+        <div class="card-body">
+            <img src="assets/icons/itens/chip/t1.png" width="60" alt="">
+        </div>
+        <div class="card-footer">
+            <span id="chipOne"></span>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header">
+            Research T1
+            <span onclick="saleTierOne()">
+        </div>
+        <div class="card-body">
+            <img src="assets/icons/itens/capsule/t1.png" width="60" alt="">
+        </div>
+        <div class="card-footer">
+            <span id="capsuleOne"></span>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header">
+            Tin Plate
+        </div>
+        <div class="card-body">
+            <img src="assets/icons/itens/plate/tin.png" width="60" alt="">
+            
+        </div>
+        <div class="card-footer">
+            <span id="tinPlate"></span>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            Tin Gear
+        </div>
+        <div class="card-body">
+            <img src="assets/icons/itens/gear/tin.png" width="60" alt="">
+        </div>
+        <div class="card-footer">
+            <span id="tinGear"></span>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            Tin Casing
+        </div>
+        <div class="card-body">
+            <img src="assets/icons/itens/casing/tin.png" width="60" alt="">
+        </div>
+        <div class="card-footer">
+            <span id="tinCasing"></span>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header">
+            Chip T2
+        </div>
+        <div class="card-body">
+            <img src="assets/icons/itens/chip/t2.png" width="60" alt="">
+        </div>
+        <div class="card-footer">
+            <span id="chipT2"></span>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header">
+            Research T2
+            <span onclick="saleT2()">
+        </div>
+        <div class="card-body">
+            <img src="assets/icons/itens/capsule/t2.png" width="60" alt="">
+        </div>
+        <div class="card-footer">
+            <span id="capsuleT2"></span>
+        </div>
+    </div>
+
+
+</div>
+</div>
+</div>
+
+<div class="bottomspace"></div>
+
+<div class="footer">
+    <div class="w20 center">
+        <button class="bottomButtom"onclick="window.location.href = 'shop.html'"><img src="assets/icons/ui/store.png" width="48" alt=""></button>
+    </div>
+    <div class="w60 center">
+        <button class="actionButton" onmousedown="miningAllStart()" onmouseup="miningAllEnd()" onclick="mining()">
+            <img src="assets/icons/itens/tool/stone_pickaxe.png" width="56" alt="minerar" id="tool">
+        </button>
+    </div>
+    <div class="w20 center">
+        <button class="bottomButtom"onclick="window.location.href = 'inventory.html'"><img src="assets/icons/ui/backpack.png" width="48" alt=""></button>
+    </div>
+</div>
+    <script src="assets/scripts/game.settings.js"></script>
+    <script src="assets/scripts/mining.js"></script>
+    <script src="assets/scripts/shop.buy.js"></script>
+    <script src="assets/scripts/shop.sale.js"></script>
+    <script src="assets/scripts/furnace.js"></script>
+    <script src="assets/scripts/factory.js"></script>
+    <script>
+        const showButton = document.getElementById('showButton');
+        const hideButton = document.getElementById('hideButton');
+        const bodyDiv = document.querySelector('.body');
+
+        showButton.addEventListener('click', function() {
+            bodyDiv.style.display = 'block'; // Exibir a div.body
+        });
+
+        hideButton.addEventListener('click', function() {
+            bodyDiv.style.display = 'none'; // Esconder a div.body
+        });
+        // Variável para armazenar o conteúdo inicial
+        var conteudoInicial = document.getElementById('content').innerHTML;
+    </script>
+</body>
+</html>
+</div>

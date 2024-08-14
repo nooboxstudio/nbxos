@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stonefactory</title>
+	<link rel="shortcut icon" href="assets/icons/ui/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="assets/style/game.css">
+</head>
+<body>
+<!-- Setor do topo-->
+<div class="header">
+    <div class="w20"></div>
+    <div class="w60 center">
+        <img src="assets/icons/ui/shop.png" width="120" style="margin-top: 20px;" alt="inventory">
+    </div>
+    <div class="w20">
+        <button class="btn-profile" onclick="window.location.href = 'profile.html'" title="profile"></button>
+    </div>
+    <div class="w80 money-section">
+        <img src="assets/icons/ui/money.png" width="32" alt=""><br>
+        <div class="money">
+            <span id="money"></span>
+        </div>
+    </div>
+</div>
+
+<button class="menu-open" id="showButton"></button>
+
+<div class="body" id="hideButton">
+    <nav class="menu">
+        <ul>
+            <li onclick="window.location.href = 'index.html'">
+                <img src="assets/icons/ui/home.png" width="30" alt="Shop">
+                <span>Home</span>
+            </li>
+            <li onclick="window.location.href = 'inventory.html'">
+                <img src="assets/icons/ui/backpack.png" width="30" alt="Shop">
+                <span>Inventory</span>
+            </li>
+            <li onclick="window.location.href = 'shop.html'">
+                <img src="assets/icons/ui/store.png" width="30" alt="Shop">
+                <span>Shop</span>
+            </li>
+            <li onclick="window.location.href = 'furnace.html'">
+                <img src="assets/icons/ui/oven.png" width="32" alt="Oven">
+                <span>Furnace</span>
+            </li>
+            <li onclick="window.location.href = 'factory.html'">
+                <img src="assets/icons/ui/factory.png" width="32" alt="industry">
+                <span>Factory</span>
+            </li>
+        </ul>
+    </nav>
+    <button class="menu-close" id="hideButton"></button>
+</div>
+
+
+
+<div id="page" class="shop">   
+<!-- homepage-->
+    <div class="row-shop">
+
+        <button onclick="buylvl1()" id="lvl1" class="card">
+            <div class="card-header">
+                Upgrade LV. 1
+                
+            </div>
+            <div class="card-body">
+                <img src="assets/icons/itens/tool/stone_pickaxe.png" alt="">
+                    <ul>
+                        <li>+1 COBBLESTONE PER CLICK</li>
+                    </ul>
+            </div>
+            <div class="card-footer">
+                COST $1.000
+            </div>
+        </button>
+
+        <button onclick="buylvl2()" id="lvl2" class="card">
+            <div class="card-header">
+               Upgrade LV. 2
+            </div>
+                <div class="card-body">
+                    <img src="assets/icons/itens/tool/iron_pickaxe.png" width="28" alt="">
+                    
+                    <ul>
+                        <li>+5 COBBLESTONE PER CLICK<br>
+                            +0.5 IRON PER CLICK</li>
+                    </ul>
+                </div>
+                <div class="card-footer">
+                    COST $2.500
+                </div>
+        </button>
+
+        <button onclick="buylvl3()" id="lvl3" class="card">
+            <div class="card-header">
+                Upgrade LV. 3
+            </div>
+
+            <div class="card-body">
+                <img src="assets/icons/itens/tool/pickaxe.png" width="28" alt="">
+                    <ul>
+                    <li>+10 COBBLESTONE PER CLICK<br>
+                        +1 IRON PER CLICK<br>
+                        +0.5 TIN PER CLICK</li>
+                </ul>
+                </div>
+                <div class="card-footer">
+                    COST $5.000
+                </div>
+
+        </button>
+
+        <button onclick="buyAutoSmelt()" id="autoSmelt" class="card">
+            <div class="card-header">
+                <h3>Auto Smelt</h3>
+            </div>
+            <div class="card-body">
+                <img src="assets/icons/ui/oven.png" width="28" alt="">
+                    <ul>
+                    <li class="center">Smelt one raw resource each per second </li>
+                </ul>
+                </div>
+                <div class="card-footer">
+                    COST $5.000
+                </div>
+        </button>
+
+        <button onclick="buylvl4()" id="lvl4" class="card">
+            <div class="card-header">
+                Upgrade LV. 4
+            </div>
+            <div class="card-body">
+                <img src="assets/icons/itens/tool/pickaxe.png" width="28" alt="">
+                    <ul>
+                    <li>+15 COBBLESTONE PER SECOND<br>
+                        +5 IRON PER SECOND<br>
+                        +1 TIN PER SECOND<br>
+                        +0.5 COPPER PER SECOND</li>
+                </ul>
+                </div>
+                <div class="card-footer">
+                    COST $10.000
+                </div>
+        </button>
+
+        <button onclick="buylvl5()" id="lvl5" class="card">
+            <div class="card-header">
+                Upgrade LV. 5
+            </div>
+            <div class="card-body">
+                <img src="assets/icons/itens/tool/pickaxe.png" width="28" alt="">
+                <ul>
+                    <li>+25 COBBLESTONE PER SECOND<br>
+                        +10 IRON PER SECOND<br>
+                        +5 TIN PER SECOND<br>
+                        +1 COPPER PER SECOND<br>
+                        +0.5 LEAD PER SECOND</li>
+                </ul>
+                </div>
+                <div class="card-footer">
+                    COST $25.000
+                </div>
+        </button>
+
+        <button onclick="buylvl6()" id="lvl6" class="card">
+            <div class="card-header">
+                Upgrade LV. 6
+            </div>
+            <div class="card-body">
+                <img src="assets/icons/itens/tool/pickaxe.png" width="28" alt="">
+                    <ul>
+                    <li>
+                    <p> +35 COBBLESTONE PER SECOND<br>
+                        +15 IRON PER SECOND<br>
+                        +10 TIN PER SECOND<br>
+                        +5 COPPER PER SECOND<br>
+                        +1 LEAD PER SECOND<br>
+                        +0.5 ZINC PER SECOND</li>
+                </ul>
+                
+                </div>
+                <div class="card-footer">
+                   COST $50.000
+                </div>
+        </button>
+        <button onclick="buylvl7()" id="lvl7" class="card">
+            <div class="card-header">
+                Upgrade LV. 7
+            </div>
+            <div class="card-body">
+                <img src="assets/icons/itens/tool/pickaxe.png" width="28" alt="">
+                    <ul>
+                    <li>+50 COBBLESTONE PER SECOND<br>
+                        +25 IRON PER SECOND<br>
+                        +15 TIN PER SECOND<br>
+                        +10 COPPER PER SECOND<br>
+                        +5 LEAD PER SECOND<br>
+                        +1 ZINC PER SECOND<br>
+                        +0.5 NICKEL PER SECOND<br></li>
+                </ul>
+                </div>
+                <div class="card-footer">
+                    COST $100.000
+                </div>
+        </button>
+        <button onclick="buylvl8()" id="lvl8" class="card">
+            <div class="card-header">
+                Upgrade LV. 8
+            </div>
+            <div class="card-body">
+                <img src="assets/icons/itens/tool/pickaxe.png" width="28" alt="">
+                    <ul>
+                    <li>+75 COBBLESTONE PER SECOND<br>
+                        +50 IRON PER SECOND<br>
+                        +25 TIN PER SECOND<br>
+                        +15 COPPER PER SECOND<br>
+                        +10 LEAD PER SECOND<br>
+                        +5 ZINC PER SECOND<br>
+                        +1 NICKEL PER SECOND<br>
+                        +0.5 GOLD PER SECOND<br></li>
+                </ul>
+                </div>
+                <div class="card-footer">
+                COST $250.000
+                </div>
+        </button>
+
+        <button onclick="buylvl9()" id="lvl9" class="card">
+            <div class="card-header">
+                Upgrade LV. 9
+            </div>
+            <div class="card-body">
+                <img src="assets/icons/itens/tool/pickaxe.png" width="28" alt="">
+                    <ul>
+                    <li>+100 COBBLESTONE PER SECOND<br>
+                        +75 IRON PER SECOND<br>
+                        +50 TIN PER SECOND<br>
+                        +25 COPPER PER SECOND<br>
+                        +15 LEAD PER SECOND<br>
+                        +10 ZINC PER SECOND<br>
+                        +5 NICKEL PER SECOND<br>
+                        +1 GOLD PER SECOND<br>
+                        +0.5 PLATINUM PER SECOND<br></li>
+                </ul>
+                </div>
+                <div class="card-footer">
+                    COST $500.000
+                </div>
+        </button>
+
+        <button onclick="buylvl10()" id="lvl10" class="card">
+            <div class="card-header">
+                Upgrade LV. 10
+            </div>
+            <div class="card-body">
+                <img src="assets/icons/itens/tool/drill.png" width="28" alt="">
+                    <ul>
+                    <li>+150 COBBLESTONE PER SECOND<br>
+                        +10 IRON PER SECOND<br>
+                        +75 TIN PER SECOND<br>
+                        +50 COPPER PER SECOND<br>
+                        +25 LEAD PER SECOND<br>
+                        +15 ZINC PER SECOND<br>
+                        +10 NICKEL PER SECOND<br>
+                        +5 GOLD PER SECOND<br>
+                        +1 PLATINUM PER SECOND<br>
+                        +0.5 DIAMOND PER SECOND</li>
+                </ul>
+                </div>
+                <div class="card-footer">
+                    COST $1.000.000
+                </div>
+        </button>
+        <button onclick="buylvl11()" id="lvl11" class="card">
+            <div class="card-header">
+                Upgrade LV. 11
+            </div>
+            <div class="card-body">
+                <img src="assets/icons/itens/tool/drill.png" width="28" alt="">
+                    <ul>
+                    <li>+200 COBBLESTONE PER SECOND<br>
+                        +150 IRON PER SECOND<br>
+                        +100 TIN PER SECOND<br>
+                        +75 COPPER PER SECOND<br>
+                        +50 LEAD PER SECOND<br>
+                        +25 ZINC PER SECOND<br>
+                        +15 NICKEL PER SECOND<br>
+                        +10 GOLD PER SECOND<br>
+                        +5 PLATINUM PER SECOND<br>
+                        +1 DIAMOND PER SECOND<br>
+                        +0.5 EMERALD PER SECOND<br></li>
+                </ul>
+                </div>
+                <div class="card-footer">
+                    COST $2.500.000
+                </div>
+        </button>
+        <button onclick="buylvl12()" id="lvl12" class="card">
+            <div class="card-header">
+                Upgrade LV. 12
+            </div>
+            <div class="card-body">
+                <img src="assets/icons/itens/tool/drill.png" width="28" alt="">
+                    <ul>
+                    <li>+250 COBBLESTONE PER SECOND<br>
+                        +150 IRON PER SECOND<br>
+                        +100 TIN PER SECOND<br>
+                        +75 COPPER PER SECOND<br>
+                        +50 LEAD PER SECOND<br>
+                        +25 ZINC PER SECOND<br>
+                        +15 NICKEL PER SECOND<br>
+                        +10 GOLD PER SECOND<br>
+                        +5 PLATINUM PER SECOND<br>
+                        +1 DIAMOND PER SECOND<br>
+                        +0.5 EMERALD PER SECOND<br>
+                        +0.5 OBSIDIAN PER SECOND<br></li>
+                </ul>
+                </div>
+                <div class="card-footer">
+                    COST $5.000.000
+                </div>
+        </button>
+        <button onclick="buylvl13()" id="lvl13" class="card">
+            <div class="card-header">
+                Upgrade LV. 13
+            </div>
+            <div class="card-body">
+                <img src="assets/icons/itens/tool/drill.png" width="28" alt="">
+                    <ul>
+                    <li> +350 COBBLESTONE PER SECOND<br>
+                        +250 IRON PER SECOND<br>
+                        +200 TIN PER SECOND<br>
+                        +150 COPPER PER SECOND<br>
+                        +100 LEAD PER SECOND<br>
+                        +75 ZINC PER SECOND<br>
+                        +50 NICKEL PER SECOND<br>
+                        +25 GOLD PER SECOND<br>
+                        +15 PLATINUM PER SECOND<br>
+                        +10 DIAMOND PER SECOND<br>
+                        +5 EMERALD PER SECOND<br>
+                        +1 OBSIDIAN PER SECOND<br></li>
+                </ul>
+                </div>
+                <div class="card-footer">
+                    COST $7.500.000
+                </div>
+        </button>
+        <button onclick="buylvl14()" id="lvl14" class="card">
+            <div class="card-header">
+                Upgrade LV. 14
+            </div>
+            <div class="card-body">
+                <img src="assets/icons/itens/tool/drill.png" width="28" alt="">
+                    <ul>
+                    <li>+500 COBBLESTONE PER SECOND<br>
+                        +350 IRON PER SECOND<br>
+                        +250 TIN PER SECOND<br>
+                        +200 COPPER PER SECOND<br>
+                        +150 LEAD PER SECOND<br>
+                        +100 ZINC PER SECOND<br>
+                        +75 NICKEL PER SECOND<br>
+                        +50 GOLD PER SECOND<br>
+                        +25 PLATINUM PER SECOND<br>
+                        +15 DIAMOND PER SECOND<br>
+                        +10 EMERALD PER SECOND<br>
+                        +5 OBSIDIAN PER SECOND<br></li>
+                </ul>
+                </div>
+                <div class="card-footer">
+                    COST $10.000.000
+                </div>
+        </button>
+        <button onclick="buylvl15()" id="lvl15" class="card">
+            <div class="card-header">
+                Upgrade LV. 15
+            </div>
+            <div class="card-body">
+                <img src="assets/icons/itens/tool/drill.png" width="28" alt="">
+                    <ul>
+                    <li>+750 COBBLESTONE PER SECOND<br>
+                        +500 IRON PER SECOND<br>
+                        +350 TIN PER SECOND<br>
+                        +250 COPPER PER SECOND<br>
+                        +200 LEAD PER SECOND<br>
+                        +150 ZINC PER SECOND<br>
+                        +100 NICKEL PER SECOND<br>
+                        +75 GOLD PER SECOND<br>
+                        +50 PLATINUM PER SECOND<br>
+                        +25 DIAMOND PER SECOND<br>
+                        +15 EMERALD PER SECOND<br>
+                        +10 OBSIDIAN PER SECOND<br></li>
+                </ul>
+                </div>
+                <div class="card-footer">
+                    COST $25.000.000 
+                </div>
+        </button>
+        <button onclick="buylvl16()" id="lvl16" class="card">
+            <div class="card-header">
+                Upgrade LV. 16
+            </div>
+            <div class="card-body">
+                <img src="assets/icons/itens/tool/drill.png" width="28" alt="">
+                    <ul>
+                    <li>+1.000 COBBLESTONE PER SECOND<br>
+                        +750 IRON PER SECOND<br>
+                        +500 TIN PER SECOND<br>
+                        +350 COPPER PER SECOND<br>
+                        +250 LEAD PER SECOND<br>
+                        +200 ZINC PER SECOND<br>
+                        +150 NICKEL PER SECOND<br>
+                        +100 GOLD PER SECOND<br>
+                        +75 PLATINUM PER SECOND<br>
+                        +50 DIAMOND PER SECOND<br>
+                        +25 EMERALD PER SECOND<br>
+                        +15 OBSIDIAN PER SECOND<br></li>
+                </ul>
+                </div>
+                <div class="card-footer">
+                    COST $50.000.000
+                </div>
+        </button>
+        <button onclick="buylvl17()" id="lvl17" class="card">
+            <div class="card-header">
+                Upgrade LV. 17
+            </div>
+            <div class="card-body">
+                <img src="assets/icons/itens/tool/drill.png" width="28" alt="">
+                    <ul>
+                    <li>+1.250 COBBLESTONE PER SECOND<br>
+                        +1.000 IRON PER SECOND<br>
+                        +750 TIN PER SECOND<br>
+                        +500 COPPER PER SECOND<br>
+                        +350 LEAD PER SECOND<br>
+                        +250 ZINC PER SECOND<br>
+                        +200 NICKEL PER SECOND<br>
+                        +150 GOLD PER SECOND<br>
+                        +100 PLATINUM PER SECOND<br>
+                        +75 DIAMOND PER SECOND<br>
+                        +50 EMERALD PER SECOND<br>
+                        +25 OBSIDIAN PER SECOND<br></li>
+                </ul>
+                </div>
+                <div class="card-footer">
+                    COST $100.000.000
+                </div>
+        </button>
+
+        <button onclick="buyAutoFactoryTierOne()" id="autoFactoryTierOne" class="card">
+            <div class="card-header">
+                Auto factory T1
+            </div>
+            <div class="card-body">
+                <img src="assets/icons/itens/tool/drill.png" width="28" alt="">
+                    <ul>
+                    <li>Auto Produce Itens for and the T1 capsule</li>
+                </ul>
+                </div>
+                <div class="card-footer">
+                    COST $1000 T1 Capsules
+                </div>
+        </button>
+    </div>
+</div>
+
+
+
+<div class="footer">
+    <div class="w20 center">
+        <button class="bottomButtom"onclick="window.location.href = 'shop.html'"><img src="assets/icons/ui/store.png" width="48" alt=""></button>
+    </div>
+    <div class="w60 center">
+        <button class="actionButton" onmousedown="miningAllStart()" onmouseup="miningAllEnd()" onclick="mining()">
+            <img src="assets/icons/itens/tool/stone_pickaxe.png" width="56" alt="minerar" id="tool">
+        </button>
+    </div>
+    <div class="w20 center">
+        <button class="bottomButtom"onclick="window.location.href = 'inventory.html'"><img src="assets/icons/ui/backpack.png" width="48" alt=""></button>
+    </div>
+</div>
+    <script src="assets/scripts/game.settings.js"></script>
+    <script src="assets/scripts/mining.js"></script>
+    <script src="assets/scripts/shop.buy.js"></script>
+    <script src="assets/scripts/shop.sale.js"></script>
+    <script src="assets/scripts/furnace.js"></script>
+    <script src="assets/scripts/factory.js"></script>
+    <script>
+        const showButton = document.getElementById('showButton');
+        const hideButton = document.getElementById('hideButton');
+        const bodyDiv = document.querySelector('.body');
+
+        showButton.addEventListener('click', function() {
+            bodyDiv.style.display = 'block'; // Exibir a div.body
+        });
+
+        hideButton.addEventListener('click', function() {
+            bodyDiv.style.display = 'none'; // Esconder a div.body
+        });
+        // Variável para armazenar o conteúdo inicial
+        var conteudoInicial = document.getElementById('content').innerHTML;
+    
+    </script>
+</body>
+</html>

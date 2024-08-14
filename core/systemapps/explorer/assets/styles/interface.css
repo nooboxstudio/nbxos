@@ -42,8 +42,12 @@ a{
     background-color: #191919;
     border: none;
 }
-.toolbar .toolbar-item:hover{
-    border:#2a2a2a solid 1px; 
+.toolbar .toolbar-item button{
+    cursor: pointer;
+}
+
+.toolbar .toolbar-item button:hover{
+    border:#424242 solid 1px; 
     border-radius: 5px;
 }
 

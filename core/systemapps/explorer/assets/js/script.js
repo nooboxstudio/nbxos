@@ -162,7 +162,6 @@ function createNewItem(type, name) {
     // Função para excluir o item selecionado
     function deleteItem() {
         if (!selectedItem) {
-            alert('Nenhum item selecionado.');
             return;
         }
 
@@ -180,7 +179,6 @@ function createNewItem(type, name) {
         .then(data => {
             console.log('Resposta do servidor:', data);
             if (data.success) {
-                alert('Item excluído com sucesso!');
                 loadFolder(currentFolder);
             } else {
                 alert(`Erro ao excluir item: ${data.error}`);
@@ -191,10 +189,43 @@ function createNewItem(type, name) {
         });
     }
 /*########################################################################################################*/
+// Função para restaurar o item selecionado
+/*function restoreItem() {
+    if (!selectedItem) {
+        alert('Nenhum item selecionado.');
+        return;
+    }
+
+    const itemPath = selectedItem.dataset.target;
+    const filename = itemPath.split('/').pop(); // Obtém o nome do arquivo/pasta
+
+    fetch('./assets/php/restore_item.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ filename: filename })
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Resposta do servidor:', data);
+        if (data.success) {
+            alert('Item restaurado com sucesso!');
+            loadFolder(currentFolder); // Atualiza a pasta atual
+        } else {
+            alert(`Erro ao restaurar item: ${data.error}`);
+        }
+    })
+    .catch(error => {
+        console.error('Erro:', error);
+    });
+}*/
+
+
+/*########################################################################################################*/
     // Função para renomear o item selecionado
     function renameItem(newName) {
         if (!selectedItem) {
-            alert('Nenhum item selecionado.');
             return;
         }
 
@@ -214,7 +245,6 @@ function createNewItem(type, name) {
         .then(data => {
             console.log('Resposta do servidor:', data);
             if (data.success) {
-                alert('Item renomeado com sucesso!');
                 loadFolder(currentFolder);
             } else {
                 alert(`Erro ao renomear item: ${data.error}`);
@@ -227,7 +257,6 @@ function createNewItem(type, name) {
     document.getElementById('rename-button').addEventListener('click', function(event) {
         event.preventDefault();
         if (!selectedItem) {
-            alert('Nenhum item selecionado.');
             return;
         }
         
@@ -349,6 +378,45 @@ loadFolder('desktop');
         cutItem();
     });
  
+/*########################################################################################################*/
+/* document.getElementById('restore-button').addEventListener('click', function(event) {
+    event.preventDefault();
+    restoreItem();
+});*/
+
+
+
+/*######################################## CHAMA AS FUNÇÃO AO PRESSIONAR OS BOTÕES ################################################################*/
+document.addEventListener('keydown', function(event) {
+    // Verifica se a tecla Delete foi pressionada
+    if (event.key === 'Delete') {
+        deleteItem();
+    } 
+    // Verifica se F2 foi pressionada
+    else if (event.key === 'F2') {
+        if (selectedItem) {
+            const currentName = selectedItem.querySelector('span').textContent; // Obtém o nome atual do item
+            const newName = prompt('Novo nome:', currentName); // Define o nome atual como valor padrão no prompt
+            
+            if (newName && newName !== currentName) { // Verifica se o novo nome é diferente do atual
+                renameItem(newName);
+            }
+        }
+    }
+    // Verifica se Ctrl+C foi pressionado
+    else if (event.ctrlKey && event.key === 'c') { 
+        copyItem();
+    }
+    // Verifica se Ctrl+X foi pressionado
+    else if (event.ctrlKey && event.key === 'x') { 
+        cutItem();
+    }
+    // Verifica se Ctrl+V foi pressionado
+    else if (event.ctrlKey && event.key === 'v') { 
+        pasteItem();
+    }
+});
+
 
 });
 

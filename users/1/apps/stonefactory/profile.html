@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stonefactory</title>
+	<link rel="shortcut icon" href="assets/icons/ui/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="assets/style/game.css">
+</head>
+<body>
+<!-- Setor do topo-->
+<div class="header">
+    <div class="w20"></div>
+    <div class="w60 center">
+        <img src="assets/icons/ui/profile.png" width="180" style="margin-top: 20px;" alt="inventory">
+    </div>
+    <div class="w20">
+        <button class="btn-profile" onclick="window.location.href = 'profile.html'" title="profile"></button>
+    </div>
+    <div class="w80 money-section">
+        <img src="assets/icons/ui/money.png" width="32" alt=""><br>
+        <div class="money">
+            <span id="money"></span>
+        </div>
+    </div>
+</div>
+
+<button class="menu-open" id="showButton"></button>
+
+<div class="body" id="hideButton">
+    <nav class="menu">
+        <ul>
+            <li onclick="window.location.href = 'index.html'">
+                <img src="assets/icons/ui/home.png" width="30" alt="Shop">
+                <span>Home</span>
+            </li>
+            <li onclick="window.location.href = 'inventory.html'">
+                <img src="assets/icons/ui/backpack.png" width="30" alt="Shop">
+                <span>Inventory</span>
+            </li>
+            <li onclick="window.location.href = 'shop.html'">
+                <img src="assets/icons/ui/store.png" width="30" alt="Shop">
+                <span>Shop</span>
+            </li>
+            <li onclick="window.location.href = 'furnace.html'">
+                <img src="assets/icons/ui/oven.png" width="32" alt="Oven">
+                <span>Furnace</span>
+            </li>
+            <li onclick="window.location.href = 'factory.html'">
+                <img src="assets/icons/ui/factory.png" width="32" alt="industry">
+                <span>Factory</span>
+            </li>
+        </ul>
+    </nav>
+    <button class="menu-close" id="hideButton"></button>
+</div>
+
+
+
+<div id="content">
+    <div id="page" class="settings">   
+        
+        <p><span>Warning! This operation cannot be undone!</span><br><br>
+            <button onclick="resetProgress()" class="btn btn-danger">
+                Reset progress
+            </button>
+            
+        </p>
+        <br>
+        <p>
+            <button onclick="autoCraft()" class="btn btn-danger">
+                Auto Crafting?
+            </button> &nbsp; <span id="autoCrafting"></span>
+        </p>
+        
+    </div>
+</div>
+<div class="footer">
+    <div class="w20 center">
+        <button class="bottomButtom"onclick="window.location.href = 'shop.html'"><img src="assets/icons/ui/store.png" width="48" alt=""></button>
+    </div>
+    <div class="w60 center">
+        <button class="actionButton" onmousedown="miningAllStart()" onmouseup="miningAllEnd()" onclick="mining()">
+            <img src="assets/icons/itens/tool/stone_pickaxe.png" width="56" alt="minerar" id="tool">
+        </button>
+    </div>
+    <div class="w20 center">
+        <button class="bottomButtom"onclick="window.location.href = 'inventory.html'"><img src="assets/icons/ui/backpack.png" width="48" alt=""></button>
+    </div>
+</div>
+    <script src="assets/scripts/game.settings.js"></script>
+    <script src="assets/scripts/mining.js"></script>
+    <script src="assets/scripts/shop.buy.js"></script>
+    <script src="assets/scripts/shop.sale.js"></script>
+    <script src="assets/scripts/furnace.js"></script>
+    <script src="assets/scripts/factory.js"></script>
+    <script>
+        const showButton = document.getElementById('showButton');
+        const hideButton = document.getElementById('hideButton');
+        const bodyDiv = document.querySelector('.body');
+
+        showButton.addEventListener('click', function() {
+            bodyDiv.style.display = 'block'; // Exibir a div.body
+        });
+
+        hideButton.addEventListener('click', function() {
+            bodyDiv.style.display = 'none'; // Esconder a div.body
+        });
+        // Variável para armazenar o conteúdo inicial
+        var conteudoInicial = document.getElementById('content').innerHTML;
+       
+    </script>
+</body>
+</html>
