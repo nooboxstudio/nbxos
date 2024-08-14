@@ -1,33 +1,73 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Text Editor</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NBX TEXT EDITOR</title>
+    <link rel="stylesheet" href="assets/css/editor.css">
 </head>
 <body>
-  <div class="toolbar">
-    <button id="saveFile">Salvar</button>
-    <button id="chooseFolder">Escolher Pasta</button>
-  </div>
-  <textarea id="editor" placeholder="Aqui você pode começar a digitar..."></textarea>
-  <script src="script.js"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Obtém o parâmetro de URL
-        const urlParams = new URLSearchParams(window.location.search);
-        const filePath = urlParams.get('file');
-
-        if (filePath) {
-            fetch(`open_file.php?file=${encodeURIComponent(filePath)}`)
-                .then(response => response.text())
-                .then(text => {
-                    document.getElementById('editor').value = text;
-                })
-                .catch(error => console.error('Erro ao abrir o arquivo:', error));
-        }
-    });
-  </script>
+    <form action="#" id="form-editor" class="form-editor">
+        <div class="topbar">
+            <div class="menu-bar">
+                <ul class="menu">
+                    <li class="menu-item">Arquivo
+                        <ul class="submenu">
+                            <li class="submenu-item">Novo</li>
+                            <li class="submenu-item">Abrir...</li>
+                            <li class="submenu-item" id="save-button">Salvar</li>
+                            <li class="submenu-item">Salvar como...</li>
+                            <li class="submenu-item">Sair</li>
+                        </ul>
+                    </li>
+                    <li class="menu-item">Editar
+                        <ul class="submenu">
+                            <li class="submenu-item">Desfazer</li>
+                            <li class="submenu-item">Recortar</li>
+                            <li class="submenu-item">Copiar</li>
+                            <li class="submenu-item">Colar</li>
+                            <li class="submenu-item">Excluir</li>
+                        </ul>
+                    </li>
+                    <li class="menu-item">Formatar
+                        <ul class="submenu">
+                            <li class="submenu-item">Fonte...
+                                <ul class="submenu">
+                                    <li class="submenu-item">Arial</li>
+                                    <li class="submenu-item">Times New Roman</li>
+                                    <li class="submenu-item">Courier New</li>
+                                </ul>
+                            </li>
+                            <li class="submenu-item">Quebra automática de linha</li>
+                        </ul>
+                    </li>
+                    <li class="menu-item">Exibir
+                        <ul class="submenu">
+                            <li class="submenu-item">Zoom
+                                <ul class="submenu">
+                                    <li class="submenu-item">Aumentar</li>
+                                    <li class="submenu-item">Diminuir</li>
+                                    <li class="submenu-item">Restaurar</li>
+                                </ul>
+                            </li>
+                            <li class="submenu-item">Status da barra</li>
+                        </ul>
+                    </li>
+                    <li class="menu-item">Ajuda
+                        <ul class="submenu">
+                            <li class="submenu-item">Ver ajuda</li>
+                            <li class="submenu-item">Enviar feedback</li>
+                            <li class="submenu-item">Sobre o Notepad</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="editor">
+            <textarea name="editor" id="editor"></textarea>
+        </div>
+    </form>
+    <script src="assets/js/editor.js"></script>
+    <script src="assets/js/menu.js"></script>
 </body>
 </html>

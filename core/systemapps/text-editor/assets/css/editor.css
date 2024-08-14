@@ -1,0 +1,86 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.form-editor {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+}
+
+.topbar {
+    width: 100%;
+    height: 38px;
+    position: fixed;
+    box-shadow: 0px 10px 15px -3px rgba(0,0,0,0.1);
+}
+
+.editor textarea {
+    width: calc(100% - 20px);
+    height: calc(100% - 50px);
+    position: fixed;
+    overflow-y: scroll;
+    top: 48px;
+    font-size: 16px;
+    padding: 10px;
+    z-index: -10000;
+    border: 0;
+}
+
+.menu-bar {
+    background-color: #f1f1f1;
+    padding: 10px;
+    z-index: 10;
+}
+
+.menu {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    z-index: 11;
+}
+
+.menu-item {
+    position: relative;
+    margin-right: 20px;
+    cursor: pointer;
+}
+
+.submenu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: none;
+    z-index: 1000;
+}
+
+.submenu-item {
+    padding: 10px;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.submenu-item:hover {
+    background-color: #f1f1f1;
+}
+
+.menu-item:hover > .submenu {
+    display: block;
+}
+
+.submenu-item:hover > .submenu {
+    display: block;
+}
+
+.submenu .submenu {
+    top: 0;
+    left: 100%;
+    margin-left: 1px;
+}
