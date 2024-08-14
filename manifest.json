@@ -5,6 +5,7 @@
   "display": "standalone",
   "background_color": "#fff",
   "description": "Operacional System on WEB",
+  "orientation": "landscape",
   "icons": [
     {
       "src": "core/assets/img/favicon.ico",
