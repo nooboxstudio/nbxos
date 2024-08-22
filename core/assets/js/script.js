@@ -61,9 +61,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function openAppWindowFromLink(link) {
     const filePath = link.getAttribute('href');
-    if (filePath.endsWith('.txt') || filePath.endsWith('.css')) {
+    if (filePath.endsWith('.txt')) {
         openTextEditor(filePath);
-    } else {
+    }
+     else {
         const appPath = link.getAttribute('href');
         const jsonPath = `${appPath}/manifest.json`;
         fetch(jsonPath)
@@ -211,9 +212,130 @@ function minimizeApp(appWindow) {
     }
 }
 
-/*#############################################################################
-# Função para adicionar ícone do aplicativo na barra de tarefas
-##############################################################################*/ 
+
+
+
+// Função para abrir a janela do perfil
+function openProfileWindow() {
+    const desktop = document.getElementById('desktop');
+
+    // Verifica se já existe uma instância da janela do perfil aberta
+    let existingWindow = openAppWindows.find(win => win.appname === 'Profile');
+    if (existingWindow) {
+        if (existingWindow.minimized) {
+            restoreApp(existingWindow.window);
+        }
+        return;
+    }
+
+    // Cria uma nova janela na área de desktop para o perfil
+    const profileWindow = document.createElement('div');
+    profileWindow.classList.add('app-window');
+    profileWindow.setAttribute('data-appname', 'Profile'); // Adiciona um atributo para identificação
+    profileWindow.style.zIndex = highestZIndex++; // Define o z-index e incrementa a variável
+
+    // Cria a barra de título da janela do perfil
+    const titleBar = document.createElement('div');
+    titleBar.classList.add('title-bar');
+
+    // Ícone do perfil
+    const icon = document.createElement('img');
+    icon.src = 'core/systemapps/profile/img/icon.png'; // Caminho para o ícone do perfil
+    icon.alt = 'Profile';
+    icon.classList.add('app-icon'); // Adicione uma classe se precisar de estilos específicos
+    titleBar.appendChild(icon);
+
+    // Título da janela do perfil
+    const title = document.createElement('span');
+    title.textContent = 'Profile';
+    title.classList.add('title');
+    titleBar.appendChild(title);
+
+    // Botões de controle (minimizar, maximizar, fechar)
+    const controls = document.createElement('div');
+    controls.classList.add('controls');
+
+    // Botão Minimizar (opcional para o perfil)
+    const minimizeButton = document.createElement('button');
+    minimizeButton.textContent = '_';
+    minimizeButton.classList.add('minimize-button');
+    minimizeButton.addEventListener('click', () => {
+        minimizeApp(profileWindow);
+    });
+    controls.appendChild(minimizeButton);
+
+    // Botão Maximizar (opcional para o perfil)
+    const maximizeButton = document.createElement('button');
+    maximizeButton.textContent = '+';
+    maximizeButton.classList.add('maximize-button');
+    maximizeButton.addEventListener('click', () => {
+        maximizeApp(profileWindow);
+    });
+    controls.appendChild(maximizeButton);
+
+    // Botão Fechar
+    const closeButton = document.createElement('button');
+    closeButton.textContent = 'X';
+    closeButton.classList.add('close-button');
+    closeButton.addEventListener('click', () => {
+        closeApp(profileWindow, { appname: 'Profile' }); // Passe um objeto simulado para corresponder à estrutura esperada
+    });
+    controls.appendChild(closeButton);
+
+    titleBar.appendChild(controls);
+    profileWindow.appendChild(titleBar);
+
+    const appContent = document.createElement('iframe');
+    appContent.src = 'core/systemapps/profile'; // Caminho personalizado para o aplicativo
+    appContent.width = '100%';
+    appContent.height = 'calc(100% - 30px)'; // Ajusta a altura descontando a altura da barra de título
+    appContent.style.border = 'none';
+    // Adiciona o conteúdo do aplicativo à janela
+    profileWindow.appendChild(appContent);
+
+    // Adiciona a janela do perfil à área de desktop
+    desktop.appendChild(profileWindow);
+
+    // Redimensionamento da janela do perfil (opcional)
+    makeResizable(profileWindow);
+
+    // Movimentação da janela do perfil
+    makeDraggable(profileWindow, titleBar);
+
+    // Adiciona a referência da janela do perfil aberta ao array
+    openAppWindows.push({
+        appname: 'Profile',
+        window: profileWindow,
+        minimized: false,
+        maximized: false,
+        previousSize: null
+    });
+
+    // Adiciona o ícone na barra de tarefas (opcional para o perfil)
+    addTaskbarIcon('Profile', 'core/systemapps/profile/img/icon.png');
+
+    // Atualiza o user.json com as janelas abertas (opcional)
+    updateOpenWindowsInJson();
+
+    // Adiciona evento para trazer a janela do perfil para frente ao clicar nela
+    profileWindow.addEventListener('mousedown', () => {
+        bringToFront(profileWindow);
+    });
+}
+
+// Inicialização: Adicione o listener para abrir a janela do perfil ao carregar o DOM
+document.addEventListener('DOMContentLoaded', () => {
+    const profileDiv = document.getElementById('profile');
+    if (profileDiv) {
+        profileDiv.addEventListener('click', (event) => {
+            event.preventDefault();
+            openProfileWindow();
+        });
+    }
+});
+
+
+// Função para adicionar ícone do aplicativo na barra de tarefas
 function addTaskbarIcon(appname, iconSrc) {
     const taskbarApps = document.getElementById('taskbar-apps');
 
@@ -945,445 +1067,193 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-/*####################### FIM DA JANELA DO EXPLORADOR DE ARQUIVOS ########################################*/
-/*####################### EXPLORADOR DE ARQUIVOS ########################################*/
-document.addEventListener('DOMContentLoaded', function() {
-    const baseUrl = 'list_files.php';  // Caminho para list_files.php
-    let currentFolder = 'desktop'; // Variável para rastrear a pasta atual
-    let selectedItem = null; // Variável para rastrear o item selecionado
-    let clipboardItem = null;
-    let isCut = false;
+/*####################### FIM DO EXPLORADOR DE ARQUIVOS########################################*/
 
-    // Função para criar atalhos fixos
-    function createFixedShortcuts(contentDiv) {
-        const fixedShortcuts = [
-            { target: 'documents', name: 'Documentos', icon: 'assets/img/pin-folder.png' },
-            { target: 'images', name: 'Imagens', icon: 'assets/img/pin-folder.png' },
-            { target: 'musics', name: 'Músicas', icon: 'assets/img/pin-folder.png' },
-            { target: 'videos', name: 'Vídeos', icon: 'assets/img/pin-folder.png' }
-        ];
 
-        fixedShortcuts.forEach(shortcut => {
-            const itemView = document.createElement('a');
-            itemView.classList.add('item-view');
-            itemView.dataset.target = shortcut.target;
-            itemView.innerHTML = `
-                <img src="${shortcut.icon}" alt="${shortcut.name}">
-                <span>${shortcut.name}</span>
-            `;
-            itemView.addEventListener('dblclick', function() {
-                loadFolder(this.dataset.target);
-            });
-
-            contentDiv.appendChild(itemView);
-        });
-    }
-
-    // Função para carregar o conteúdo da pasta
-    function loadFolder(folder = '') {
-        currentFolder = folder;
-        fetch(`${baseUrl}?folder=${encodeURIComponent(folder)}`)
-            .then(response => response.json())
-            .then(data => {
-                const contentDiv = document.getElementById('content');
-
-                // Limpa o conteúdo atual
-                contentDiv.innerHTML = '';
-
-                // Se estiver na pasta 'desktop', recria os atalhos fixos
-                if (folder === 'desktop') {
-                    createFixedShortcuts(contentDiv);
-                }
-
-                if (data.error) {
-                    contentDiv.innerHTML = `<div>${data.error}</div>`;
-                    return;
-                }
-
-                // Adiciona os itens da pasta
-                data.forEach(item => {
-                    const itemView = document.createElement('a');
-                    itemView.classList.add('item-view');
-                    itemView.dataset.target = folder + '/' + item.name;
-
-                    if (item.type === 'folder') {
-                        itemView.innerHTML = `
-                            <img src="assets/img/folder.png" alt="${item.name}">
-                            <span>${item.name}</span>
-                        `;
-                        itemView.addEventListener('dblclick', function() {
-                            loadFolder(this.dataset.target);
-                        });
-
-                        itemView.addEventListener('click', function() {
-                            selectItem(this);
-                        });
-                    } else {
-                        itemView.innerHTML = `
-                            <img src="assets/img/file.png" alt="${item.name}">
-                            <span>${item.name}</span>
-                        `;
-                        itemView.addEventListener('click', function() {
-                            selectItem(this);
-                        });
-
-                        itemView.addEventListener('dblclick', function() {
-                            const fileType = item.name.split('.').pop().toLowerCase();
-                            if (fileType === 'txt' || fileType === 'css') {
-                                openTextEditor(folder + '/' + item.name);
-                            } else {
-                                alert('Este tipo de arquivo não pode ser aberto no editor de texto.');
-                            }
-                        });
-                    }
-
-                    contentDiv.appendChild(itemView);
-                });
-            })
-            .catch(error => {
-                console.error('Erro ao carregar a pasta:', error);
-            });
-    }
-    
-
-/*########################################################################################################*/
-    // Função para selecionar um item
-    function selectItem(item) {
-        // Remove a seleção de itens anteriores
-        if (selectedItem) {
-            selectedItem.style.opacity = 1;
+/*#################### OPEN TEXT EDITOR #######################################################*/
+function openTextEditor(filePath) {
+    // Verifica se já existe uma instância do editor aberta
+    let existingWindow = openAppWindows.find(win => win.appname === 'TextEditor');
+    if (existingWindow) {
+        if (existingWindow.minimized) {
+            restoreApp(existingWindow.window);
         }
-
-        // Seleciona o novo item
-        selectedItem = item;
-        selectedItem.style.opacity = 0.75;
-
-        // Habilita os botões de ação
-        document.getElementById('rename-button').disabled = false;
-        document.getElementById('delete-button').disabled = false;
-        document.getElementById('paste-button').disabled = false;
-        document.getElementById('copy-button').disabled = false;
-        document.getElementById('cut-button').disabled = false;
-    }
-
-    // Função para des-selecionar o item atual
-    function deselectItem() {
-        if (selectedItem) {
-            selectedItem.style.opacity = 1;
-            selectedItem = null;
-
-            // Desabilita os botões de ação
-            document.getElementById('rename-button').disabled = true;
-            document.getElementById('delete-button').disabled = true;
-            document.getElementById('paste-button').disabled = true;
-            document.getElementById('copy-button').disabled = true;
-            document.getElementById('cut-button').disabled = true;
-        }
-    }
-
-    // Adiciona um ouvinte de evento de clique no document para des-selecionar o item quando clicar fora
-    document.addEventListener('click', function(event) {
-        // Des-seleciona o item se o clique foi fora de um item
-        if (selectedItem && !selectedItem.contains(event.target)) {
-            deselectItem();
-        }
-    });
-
-/*########################################################################################################*/
-    // Função para criar novo item (pasta ou arquivo)
-function createNewItem(type, name) {
-    const path = `${currentFolder}/${name}`;
-    fetch('./assets/php/create_item.php', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            type: type,
-            path: path
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log('Resposta do servidor:', data);
-        if (data.success) {
-            console.log('Recarregando a pasta:', currentFolder);
-            loadFolder(currentFolder); // Recarrega a pasta atual
-        } else {
-            alert(`Erro ao criar ${type === 'folder' ? 'pasta' : 'arquivo'}: ${data.error}`);
-        }
-    })
-    .catch(error => {
-        console.error('Erro:', error);
-    });
-}
-
-/*########################################################################################################*/
-    // Função para excluir o item selecionado
-    function deleteItem() {
-        if (!selectedItem) {
-            return;
-        }
-
-        const itemPath = selectedItem.dataset.target;
-        fetch('./assets/php/delete_item.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                path: itemPath
-            })
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log('Resposta do servidor:', data);
-            if (data.success) {
-                loadFolder(currentFolder);
-            } else {
-                alert(`Erro ao excluir item: ${data.error}`);
-            }
-        })
-        .catch(error => {
-            console.error('Erro:', error);
-        });
-    }
-/*########################################################################################################*/
-// Função para restaurar o item selecionado
-/*function restoreItem() {
-    if (!selectedItem) {
-        alert('Nenhum item selecionado.');
         return;
     }
 
-    const itemPath = selectedItem.dataset.target;
-    const filename = itemPath.split('/').pop(); // Obtém o nome do arquivo/pasta
+    // Cria uma nova janela para o editor de texto
+    const appWindow = document.createElement('div');
+    appWindow.classList.add('app-window');
+    appWindow.setAttribute('data-appname', 'TextEditor');
+    appWindow.style.zIndex = highestZIndex++;
 
-    fetch('./assets/php/restore_item.php', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ filename: filename })
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log('Resposta do servidor:', data);
-        if (data.success) {
-            alert('Item restaurado com sucesso!');
-            loadFolder(currentFolder); // Atualiza a pasta atual
-        } else {
-            alert(`Erro ao restaurar item: ${data.error}`);
-        }
-    })
-    .catch(error => {
-        console.error('Erro:', error);
+    const titleBar = document.createElement('div');
+    titleBar.classList.add('title-bar');
+
+    const title = document.createElement('span');
+    title.textContent = 'Text Editor';
+    title.classList.add('title');
+    titleBar.appendChild(title);
+
+    const controls = document.createElement('div');
+    controls.classList.add('controls');
+
+    const minimizeButton = document.createElement('button');
+    minimizeButton.textContent = '_';
+    minimizeButton.classList.add('minimize-button');
+    minimizeButton.addEventListener('click', () => minimizeApp(appWindow));
+    controls.appendChild(minimizeButton);
+
+    const maximizeButton = document.createElement('button');
+    maximizeButton.textContent = '+';
+    maximizeButton.classList.add('maximize-button');
+    maximizeButton.addEventListener('click', () => maximizeApp(appWindow));
+    controls.appendChild(maximizeButton);
+
+    const closeButton = document.createElement('button');
+    closeButton.textContent = 'X';
+    closeButton.classList.add('close-button');
+    closeButton.addEventListener('click', () => closeApp(appWindow, { appname: 'TextEditor' }));
+    controls.appendChild(closeButton);
+
+    titleBar.appendChild(controls);
+    appWindow.appendChild(titleBar);
+
+    // Cria o conteúdo da janela
+    const textContent = document.createElement('textarea');
+    textContent.id = 'text-editor-content';
+    textContent.style.width = '100%';
+    textContent.style.height = 'calc(100% - 30px)'; // Ajusta altura descontando a altura da barra de título
+    textContent.style.border = 'none';
+
+    appWindow.appendChild(textContent);
+    document.getElementById('desktop').appendChild(appWindow);
+
+    makeResizable(appWindow);
+    makeDraggable(appWindow, titleBar);
+
+    openAppWindows.push({
+        appname: 'TextEditor',
+        window: appWindow,
+        minimized: false,
+        maximized: false,
+        previousSize: null
     });
-}*/
 
+    addTaskbarIcon('TextEditor', 'path/to/text-editor-icon.png');
 
-/*########################################################################################################*/
-    // Função para renomear o item selecionado
-    function renameItem(newName) {
-        if (!selectedItem) {
-            return;
+    appWindow.addEventListener('mousedown', () => bringToFront(appWindow));
+
+    // Carrega o conteúdo do arquivo de texto
+    fetch(filePath)
+        .then(response => response.text())
+        .then(text => {
+            textContent.value = text;
+        })
+        .catch(error => console.error('Erro ao carregar o arquivo de texto:', error));
+}
+
+/*#################### OPEN TEXT EDITOR END ####################################################*/
+function openTextEditor(filePath) {
+    // Verifica se já existe uma instância do editor de texto aberta
+    let existingEditor = openAppWindows.find(win => win.appname === 'Text Editor');
+    if (existingEditor) {
+        if (existingEditor.minimized) {
+            restoreApp(existingEditor.window);
         }
-
-        const oldPath = selectedItem.dataset.target;
-        const newPath = `${currentFolder}/${newName}`;
-        fetch('./assets/php/rename_item.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                oldPath: oldPath,
-                newPath: newPath
-            })
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log('Resposta do servidor:', data);
-            if (data.success) {
-                loadFolder(currentFolder);
-            } else {
-                alert(`Erro ao renomear item: ${data.error}`);
-            }
-        })
-        .catch(error => {
-            console.error('Erro:', error);
-        });
+        return;
     }
-    document.getElementById('rename-button').addEventListener('click', function(event) {
-        event.preventDefault();
-        if (!selectedItem) {
-            return;
-        }
-        
-        const currentName = selectedItem.querySelector('span').textContent; // Obtém o nome atual do item
-        const newName = prompt('Novo nome:', currentName); // Define o nome atual como valor padrão no prompt
-        
-        if (newName && newName !== currentName) { // Verifica se o novo nome é diferente do atual
-            renameItem(newName);
-        }
-    });
-
-/*########################################################################################################*/
-function copyItem() {
-    if (!selectedItem) return alert('No item selected.');
-    const itemPath = selectedItem.dataset.target;
-    fetch('./assets/php/copy_item.php', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ path: itemPath })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) clipboardItem = data.clipboardPath;
-        else alert(`Error copying item: ${data.error}`);
-    })
-    .catch(error => console.error('Error:', error));
-}
-
-// Cut item
-function cutItem() {
-    if (!selectedItem) return alert('No item selected.');
-    const itemPath = selectedItem.dataset.target;
-    fetch('./assets/php/cut_item.php', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ path: itemPath })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            clipboardItem = data.clipboardPath;
-            isCut = true;
-        } else alert(`Error cutting item: ${data.error}`);
-    })
-    .catch(error => console.error('Error:', error));
-}
-
-// Paste item
-function pasteItem() {
-    if (!clipboardItem) return alert('No item to paste.');
-    const destPath = currentFolder;
-    fetch('./assets/php/paste_item.php', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ source: clipboardItem, destination: destPath, cut: isCut })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) loadFolder(currentFolder);
-        else alert(`Error pasting item: ${data.error}`);
-    })
-    .catch(error => console.error('Error:', error));
-}
-
-// Initialize
-loadFolder('desktop');
-
-
-/*########################################################################################################*/
-
-    // Adiciona event listeners para clicar nas pastas da barra lateral
-    const sidebarLinks = document.querySelectorAll('.sidebar a');
-    sidebarLinks.forEach(link => {
-        link.addEventListener('click', function(event) {
-            event.preventDefault();
-            const folder = this.getAttribute('data-target');
-            loadFolder(folder);
-        });
-    });
-/*########################################################################################################*/
-    // Adiciona event listeners para criar nova pasta e arquivo
-    document.getElementById('new-folder').addEventListener('click', function(event) {
-        event.preventDefault();
-        const folderName = "Nova Pasta";
-        if (folderName) {
-            createNewItem('folder', folderName);
-        }
-    });
-/*########################################################################################################*/
-    document.getElementById('new-file').addEventListener('click', function(event) {
-        event.preventDefault();
-        const fileName = "Novo Arquivo";
-        const fileextension = ".txt";
-        if (fileName) {
-            createNewItem('file', fileName+fileextension);
-        }
-    });
     
-/*########################################################################################################*/
-    // Adiciona event listeners para os botões de ação
-    document.getElementById('delete-button').addEventListener('click', function(event) {
-        event.preventDefault();
-        deleteItem();
+    // Cria uma nova janela para o editor de texto
+    const appWindow = document.createElement('div');
+    appWindow.classList.add('app-window');
+    appWindow.setAttribute('data-appname', 'Text Editor'); // Identifica a janela como Editor de Texto
+    appWindow.style.zIndex = highestZIndex++; // Define o z-index e incrementa a variável
+
+    // Cria a barra de título do editor
+    const titleBar = document.createElement('div');
+    titleBar.classList.add('title-bar');
+
+    // Ícone do editor
+    const icon = document.createElement('img');
+    icon.src = 'assets/img/text-editor-icon.png'; // Caminho para o ícone do editor
+    icon.alt = 'Text Editor';
+    icon.classList.add('app-icon');
+    titleBar.appendChild(icon);
+
+    // Título do editor
+    const title = document.createElement('span');
+    title.textContent = 'Text Editor';
+    title.classList.add('title');
+    titleBar.appendChild(title);
+
+    // Botões de controle (minimizar, maximizar, fechar)
+    const controls = document.createElement('div');
+    controls.classList.add('controls');
+
+    // Botão Minimizar
+    const minimizeButton = document.createElement('button');
+    minimizeButton.textContent = '_';
+    minimizeButton.classList.add('minimize-button');
+    minimizeButton.addEventListener('click', () => {
+        minimizeApp(appWindow);
     });
-/*########################################################################################################*/
-     // Adiciona ouvintes aos botões de copiar e colar
-     document.getElementById('copy-button').addEventListener('click', function(event) {
-        event.preventDefault();
-        copyItem();
+    controls.appendChild(minimizeButton);
+
+    // Botão Maximizar
+    const maximizeButton = document.createElement('button');
+    maximizeButton.textContent = '+';
+    maximizeButton.classList.add('maximize-button');
+    maximizeButton.addEventListener('click', () => {
+        maximizeApp(appWindow);
     });
-/*########################################################################################################*/
-    document.getElementById('paste-button').addEventListener('click', function(event) {
-        event.preventDefault();
-        pasteItem();
+    controls.appendChild(maximizeButton);
+
+    // Botão Fechar
+    const closeButton = document.createElement('button');
+    closeButton.textContent = 'X';
+    closeButton.classList.add('close-button');
+    closeButton.addEventListener('click', () => {
+        closeApp(appWindow, { appname: 'Text Editor' });
     });
-/*########################################################################################################*/
-    document.getElementById('cut-button').addEventListener('click', function(event) {
-            event.preventDefault();
-        cutItem();
+    controls.appendChild(closeButton);
+
+    titleBar.appendChild(controls);
+    appWindow.appendChild(titleBar);
+
+    // Cria o conteúdo do editor (iframe)
+    const appContent = document.createElement('iframe');
+    appContent.src = `core/systemapps/text-editor/index.html?file=${encodeURIComponent(filePath)}`; // Passa o caminho do arquivo para o editor
+    appContent.width = '100%';
+    appContent.height = 'calc(100% - 30px)'; // Ajusta a altura descontando a altura da barra de título
+    appContent.style.border = 'none';
+
+    appWindow.appendChild(appContent);
+
+    // Adiciona a janela à área de desktop
+    const desktop = document.getElementById('desktop');
+    desktop.appendChild(appWindow);
+
+    // Redimensionamento da janela
+    makeResizable(appWindow);
+
+    // Movimentação da janela
+    makeDraggable(appWindow, titleBar);
+
+    // Adiciona a referência da janela aberta ao array
+    openAppWindows.push({
+        appname: 'Text Editor',
+        window: appWindow,
+        minimized: false,
+        maximized: false,
+        previousSize: null
     });
- 
-/*########################################################################################################*/
-// Bloqueia o clique direito na página inteira
-/*document.addEventListener('contextmenu', function(event) {
-    event.preventDefault(); // Previne a ação padrão (exibir o menu de contexto)
-});*/
 
-/*######################################## CHAMA AS FUNÇÃO AO PRESSIONAR OS BOTÕES ################################################################*/
-document.addEventListener('keydown', function(event) {
-    // Verifica se a tecla Delete foi pressionada
-    if (event.key === 'Delete') {
-        deleteItem();
-    } 
-    // Verifica se F2 foi pressionada
-    else if (event.key === 'F2') {
-        if (selectedItem) {
-            const currentName = selectedItem.querySelector('span').textContent; // Obtém o nome atual do item
-            const newName = prompt('Novo nome:', currentName); // Define o nome atual como valor padrão no prompt
-            
-            if (newName && newName !== currentName) { // Verifica se o novo nome é diferente do atual
-                renameItem(newName);
-            }
-        }
-    }
-    // Verifica se Ctrl+C foi pressionado
-    else if (event.ctrlKey && event.key === 'c') { 
-        copyItem();
-    }
-    // Verifica se Ctrl+X foi pressionado
-    else if (event.ctrlKey && event.key === 'x') { 
-        cutItem();
-    }
-    // Verifica se Ctrl+V foi pressionado
-    else if (event.ctrlKey && event.key === 'v') { 
-        pasteItem();
-    }
-});
+    // Adiciona o ícone na barra de tarefas
+    addTaskbarIcon('Text Editor', 'assets/img/text-editor-icon.png');
 
-
-});
-
-
-/*####################### FIM DO EXPLORADOR DE ARQUIVOS ########################################*/
-
-
-
-
-
-
-
+    // Adiciona evento para trazer a janela para frente ao clicar nela
+    appWindow.addEventListener('mousedown', () => {
+        bringToFront(appWindow);
+    });
+}

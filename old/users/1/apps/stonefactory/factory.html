@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stonefactory</title>
+	<link rel="shortcut icon" href="assets/icons/ui/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="assets/style/game.css">
+</head>
+<body>
+<!-- Setor do topo-->
+<div class="header">
+    <div class="w20"></div>
+    <div class="w60 center">
+        <img src="assets/icons/ui/factory_logo.png" width="220" style="margin-top: 20px;" alt="inventory">
+    </div>
+    <div class="w20">
+        <button class="btn-profile" onclick="window.location.href = 'profile.html'" title="profile"></button>
+    </div>
+    <div class="w80 money-section">
+        <img src="assets/icons/ui/money.png" width="32" alt=""><br>
+        <div class="money">
+            <span id="money"></span>
+        </div>
+    </div>
+</div>
+
+<button class="menu-open" id="showButton"></button>
+
+<div class="body" id="hideButton">
+    <nav class="menu">
+        <ul>
+            <li onclick="window.location.href = 'index.html'">
+                <img src="assets/icons/ui/home.png" width="30" alt="Shop">
+                <span>Home</span>
+            </li>
+            <li onclick="window.location.href = 'inventory.html'">
+                <img src="assets/icons/ui/backpack.png" width="30" alt="Shop">
+                <span>Inventory</span>
+            </li>
+            <li onclick="window.location.href = 'shop.html'">
+                <img src="assets/icons/ui/store.png" width="30" alt="Shop">
+                <span>Shop</span>
+            </li>
+            <li onclick="window.location.href = 'furnace.html'">
+                <img src="assets/icons/ui/oven.png" width="32" alt="Oven">
+                <span>Furnace</span>
+            </li>
+            <li onclick="window.location.href = 'factory.html'">
+                <img src="assets/icons/ui/factory.png" width="32" alt="industry">
+                <span>Factory</span>
+            </li>
+        </ul>
+    </nav>
+    <button class="menu-close" id="hideButton"></button>
+</div>
+
+
+
+<div id="content">
+<div id="page" class="backpack">   
+<!-- homepage-->
+<!-- ROW ITENS-->
+    <div class="row-itens">
+
+<span id="cobblestone" class="hidden"></span>
+<span id="rawIron" class="hidden"></span>
+<span id="rawTin" class="hidden"></span>
+<span id="rawCopper" class="hidden"></span>
+<span id="rawLead" class="hidden"></span>
+<span id="rawZinc" class="hidden"></span>
+<span id="rawNickel" class="hidden"></span>
+<span id="rawGold" class="hidden"></span>
+<span id="rawPlatinum" class="hidden"></span>
+<span id="rawDiamond" class="hidden"></span>
+<span id="rawEmerald" class="hidden"></span>
+<span id="rawObsidian" class="hidden"></span>
+<span id="stone" class="hidden"></span>
+<span id="ironIngot" class="hidden"></span>
+<span id="tinIngot" class="hidden"></span>
+<span id="copperIngot" class="hidden"></span>
+<span id="leadIngot" class="hidden"></span>
+<span id="zincIngot" class="hidden"></span>
+<span id="nickelIngot" class="hidden"></span>
+<span id="goldIngot" class="hidden"></span>
+<span id="platinumIngot" class="hidden"></span>
+<span id="diamond" class="hidden"></span>
+<span id="emerald" class="hidden"></span>
+<span id="obsidian" class="hidden"></span>
+<span id="autoFactoryTierOne" class="hidden"></span>
+
+
+    <div class="biglist">
+        <div class="biglist-header">
+            T1 Factory
+        </div>
+        
+        <div class="biglist-body">
+            <button onclick="craftIronPlate()" class="tooltip">
+                <span class="tooltip-content">
+                    Require:<br> 
+                     -> 1 iron ingot
+                </span>
+                <div class="card">
+                    <div class="card-header">
+                        Iron Plate
+                    </div>
+                    <div class="card-body">
+                        <img src="assets/icons/itens/plate/iron.png" width="60" alt="">
+                    </div>
+                    <div class="card-footer">
+                        <span id="ironPlate"></span>
+                    </div>
+                </div>
+            </button>
+        
+            <button onclick="craftIronGear()" class="tooltip">
+                <span class="tooltip-content">
+                    Require:<br> 
+                    -> 4 iron ingot
+                </span>
+                <div class="card">
+                    <div class="card-header">
+                        Iron Gear
+                    </div>
+                    <div class="card-body">
+            
+                        <img src="assets/icons/itens/gear/iron.png" width="60" alt="">
+                    </div>
+                    <div class="card-footer">
+                        <span id="ironGear"></span>
+                    </div>
+                </div>
+            </button>
+        
+            <button onclick="craftIronCase()" title="Require 4 iron Plate and 1 Iron Gear" class="tooltip">
+                <span class="tooltip-content">
+                    Require:<br> 
+                     -> 4 iron Plate<br>
+                     -> 1 Iron Gear
+                </span>
+                <div class="card">
+                    <div class="card-header">
+                        Iron Casing
+                    </div>
+                    <div class="card-body">
+                        <img src="assets/icons/itens/casing/iron.png" width="60" alt="">
+                    </div>
+                    <div class="card-footer">
+                        <span id="ironCasing"></span>
+                    </div>
+                </div>
+            </button>
+        
+            <button onclick="craftChipOne()" title="Require 1 iron Plate" class="tooltip">
+                <span class="tooltip-content">
+                    Require:<br> 
+                     -> 1 iron Plate
+                </span>
+                <div class="card">
+                <div class="card-header">
+                    Chip T1
+                </div>
+                <div class="card-body">
+                    <img src="assets/icons/itens/chip/t1.png" width="60" alt="">
+                </div>
+                <div class="card-footer">
+                    <span id="chipOne"></span>
+                </div>
+            </div>
+            </button>
+        
+            <button onclick="craftCapsuleOne()" class="tooltip" title="Require 1 Iron casing and 1 Chip T1">
+                <span class="tooltip-content">
+                    Require:<br> 
+                     -> 1 iron Casing
+                     -> 1 Chip T1
+                </span>
+                <div class="card">
+                <div class="card-header">
+                    Research T1
+                </div>
+                <div class="card-body">
+                    <img src="assets/icons/itens/capsule/t1.png" width="60" alt="">
+                </div>
+                <div class="card-footer">
+                    <span id="capsuleOne"></span>
+                </div>
+            </div>
+            </button>
+        </div>
+    </div>
+
+    <div class="biglist">
+        <div class="biglist-header">
+            T2 Factory
+        </div>
+        <div class="biglist-body">
+            <button onclick="craftTinPlate()" class="tooltip" title="Require 1 Tin ingot">
+                <span class="tooltip-content">
+                    Require:<br> 
+                     -> 1 tin ingot
+                </span>
+                <div class="card ">
+                    <div class="card-header">
+                        Tin Plate
+                    </div>
+                    
+                    <div class="card-body">
+            
+                        <img src="assets/icons/itens/plate/tin.png" width="60" alt="">
+                        
+                    </div>
+                    <div class="card-footer">
+                        <span id="tinPlate"></span>
+                    </div>
+                </div>
+            </button>
+        
+            <button onclick="craftTinGear()" class="tooltip">
+                <span class="tooltip-content">
+                    Require:<br> 
+                     -> 4 tin ingot
+                </span>
+                <div class="card">
+                    <div class="card-header">
+                        Tin Gear
+                    </div>
+                    <div class="card-body">
+            
+                        <img src="assets/icons/itens/gear/tin.png" width="60" alt="">
+                    </div>
+                    <div class="card-footer">
+                        <span id="tinGear"></span>
+                    </div>
+                </div>
+            </button>
+        
+            <button onclick="craftTinCase()" class="tooltip">
+                <span class="tooltip-content">
+                    Require:<br> 
+                    -> 4 tin plate<br>
+                    -> 1 tin gear
+                </span>
+                <div class="card">
+                    <div class="card-header">
+                        Tin Casing
+                    </div>
+                    <div class="card-body">
+                        <img src="assets/icons/itens/casing/tin.png" width="60" alt="">
+                    </div>
+                    <div class="card-footer">
+                        <span id="tinCasing"></span>
+                    </div>
+                </div>
+            </button>
+        
+            <button onclick="craftChipT2()" class="tooltip">
+                <span class="tooltip-content">
+                    Require:<br> 
+                     -> 1 tin plate
+                </span>
+            <div class="card">
+                <div class="card-header">
+                    Chip T2
+                </div>
+                <div class="card-body">
+                    <img src="assets/icons/itens/chip/t2.png" width="60" alt="">
+                </div>
+                <div class="card-footer">
+                    <span id="chipT2"></span>
+                </div>
+            </div>
+            </button>
+        
+            <button onclick="craftCapsuleT2()" class="tooltip" title="Require 1 Iron casing and 1 Chip T1">
+                <span class="tooltip-content">
+                    Require:<br> 
+                     -> 1 tin Casing <br>
+                     -> 1 Chip T2
+                </span>
+                <div class="card">
+                <div class="card-header">
+                    Research T2
+                </div>
+                <div class="card-body">
+                    <img src="assets/icons/itens/capsule/t2.png" width="60" alt="">
+                </div>
+                <div class="card-footer">
+                    <span id="capsuleT2"></span>
+                </div>
+            </div>
+            </button>
+        </div>
+    </div>
+
+    
+    
+
+
+
+</div>
+</div>
+</div>
+
+<div class="bottomspace"></div>
+
+<div class="footer">
+    <div class="w20 center">
+        <button class="bottomButtom"onclick="window.location.href = 'shop.html'"><img src="assets/icons/ui/store.png" width="48" alt=""></button>
+    </div>
+    <div class="w60 center">
+        <button class="actionButton" onclick="autoT1()">
+            <img src="assets/icons/ui/factory.png" width="56" alt="minerar" id="tool">
+        </button>
+    </div>
+    <div class="w20 center">
+        <button class="bottomButtom"onclick="window.location.href = 'inventory.html'"><img src="assets/icons/ui/backpack.png" width="48" alt=""></button>
+    </div>
+</div>
+    <script src="assets/scripts/game.settings.js"></script>
+    <script src="assets/scripts/mining.js"></script>
+    <script src="assets/scripts/shop.buy.js"></script>
+    <script src="assets/scripts/shop.sale.js"></script>
+    <script src="assets/scripts/furnace.js"></script>
+    <script src="assets/scripts/factory.js"></script>
+    <script>
+        const showButton = document.getElementById('showButton');
+        const hideButton = document.getElementById('hideButton');
+        const bodyDiv = document.querySelector('.body');
+
+        showButton.addEventListener('click', function() {
+            bodyDiv.style.display = 'block'; // Exibir a div.body
+        });
+
+        hideButton.addEventListener('click', function() {
+            bodyDiv.style.display = 'none'; // Esconder a div.body
+        });
+        // Variável para armazenar o conteúdo inicial
+        var conteudoInicial = document.getElementById('content').innerHTML;
+    </script>
+</body>
+</html>
+</div>

@@ -1,0 +1,57 @@
+
+.file-explorer {
+    display: flex;
+    height: 100%;
+}
+
+.sidebar {
+    width: 200px;
+    min-height: 100%;
+    height: auto;
+    background-color: #f4f4f4;
+    padding: 10px;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    overflow-y: auto;
+}
+
+.main-content {
+    flex-grow: 1;
+    padding: 20px;
+}
+
+.file-list {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 10px;
+}
+
+.file-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100px;
+    margin: 10px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.file-icon {
+    width: 64px;
+    height: 64px;
+}
+
+.sidebar-item {
+    cursor: pointer;
+    padding: 5px;
+    margin: 5px 0;
+    border-bottom: 1px solid #ddd;
+}
+
+.subfolder-list {
+    margin-left: 20px;
+}
+
+.toolbar{
+    width: 100%;
+    height: 30px;
+}

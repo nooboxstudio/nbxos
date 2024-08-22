@@ -1,119 +1,33 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NBX TEXT EDITOR</title>
-    <link rel="stylesheet" href="assets/css/editor.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Text Editor</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <form action="#" id="form-editor" class="form-editor">
-        <div class="topbar">
-            <div class="menu-bar">
-                <ul class="menu">
-                    <li class="menu-item">Arquivo
-                        <ul class="submenu">
-                            <li class="submenu-item">Novo</li>
-                            <li class="submenu-item">Abrir...</li>
-                            <li class="submenu-item" id="save-as">Salvar Como...</li>
-                            <li class="submenu-item" id="save-button">Salvar</li>
-                            <li class="submenu-item">Sair</li>
-                        </ul>
-                    </li>
-                    
-                    <li class="menu-item">Editar
-                        <ul class="submenu">
-                            <li class="submenu-item" id="undo">Desfazer</li>
-                            <li class="submenu-item" id="cut">Recortar</li>
-                            <li class="submenu-item" id="copy">Copiar</li>
-                            <li class="submenu-item" id="paste">Colar</li>
-                            <li class="submenu-item" id="delete">Excluir</li>
-                        </ul>
-                    </li>                   
-                    
-                    <li class="menu-item">Formatar
-                        <ul class="submenu">
-                            <li class="submenu-item" id="font-menu">Fonte...
-                                <ul class="submenu">
-                                    <li class="submenu-item" data-font="Arial">Arial</li>
-                                    <li class="submenu-item" data-font="Times New Roman">Times New Roman</li>
-                                    <li class="submenu-item" data-font="Courier New">Courier New</li>
-                                </ul>
-                            </li>
-                            <li class="submenu-item" id="wrap-text">
-                                Quebra automática de linha
-                                <input type="checkbox" id="wrap-checkbox">
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="menu-item">Exibir
-                        <ul class="submenu">
-                            <li class="submenu-item">Zoom
-                                <ul class="submenu">
-                                    <li class="submenu-item" id="zoom-in">Aumentar</li>
-                                    <li class="submenu-item" id="zoom-out">Diminuir</li>
-                                    <li class="submenu-item" id="zoom-reset">Restaurar</li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </li>      
-                    <li class="menu-item">Ajuda
-                        <ul class="submenu">
-                            <li class="submenu-item" id="help">Ver ajuda</li>
-                            <li class="submenu-item" id="feedback">Enviar feedback</li>
-                            <li class="submenu-item" id="about">Sobre o Notepad</li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-        </div>
-        <div class="editor">
-            <textarea name="editor" id="editor"></textarea>
-        </div>
-        
-    </form>
+  <div class="toolbar">
+    <button id="saveFile">Salvar</button>
+    <button id="chooseFolder">Escolher Pasta</button>
+  </div>
+  <textarea id="editor" placeholder="Aqui você pode começar a digitar..."></textarea>
+  <script src="script.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Obtém o parâmetro de URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const filePath = urlParams.get('file');
 
-     <!-- Modais -->
-     <div id="help-modal" class="modal">
-        <div class="modal-content">
-            <span class="close" id="close-help">&times;</span>
-            <h2>Ajuda</h2>
-            <p>Este é o conteúdo de ajuda.</p>
-        </div>
-    </div>
-
-    <div id="feedback-modal" class="modal">
-        <div class="modal-content">
-            <span class="close" id="close-feedback">&times;</span>
-            <h2>Enviar Feedback</h2>
-            <p>Formulário para enviar feedback.</p>
-        </div>
-    </div>
-
-    <div id="about-modal" class="modal">
-        <div class="modal-content">
-            <span class="close" id="close-about">&times;</span>
-            <h2>Sobre o Notepad</h2>
-            <p>Informações sobre o Notepad.</p>
-        </div>
-    </div>
-    <!-- Modal para Salvar Como -->
-<div id="save-as-modal" class="modal">
-    <div class="modal-content">
-        <span class="close-btn" id="close-modal">&times;</span>
-        <h2>Salvar Como</h2>
-        <label for="filename">Nome do Arquivo:</label>
-        <input type="text" id="filename" name="filename" placeholder="Digite o nome do arquivo">
-        <label for="folder">Selecionar Pasta:</label>
-        <select id="folder" name="folder">
-            <!-- Aqui você pode preencher as opções dinamicamente com subpastas -->
-        </select>
-        <button id="save-file">Salvar</button>
-    </div>
-</div>
-
-
-    <script src="assets/js/editor.js"></script>
-    <script src="assets/js/menu.js"></script>
+        if (filePath) {
+            fetch(`open_file.php?file=${encodeURIComponent(filePath)}`)
+                .then(response => response.text())
+                .then(text => {
+                    document.getElementById('editor').value = text;
+                })
+                .catch(error => console.error('Erro ao abrir o arquivo:', error));
+        }
+    });
+  </script>
 </body>
 </html>

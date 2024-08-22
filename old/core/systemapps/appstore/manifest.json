@@ -1,0 +1,7 @@
+{
+    "appname":"NBX APP Store",
+    "desc":"Shop for Apps",
+    "version": "1.0",
+    "appindex": "index.php",
+    "logo":"assets/img/icon.png"
+}

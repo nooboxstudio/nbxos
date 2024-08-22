@@ -1,0 +1,7 @@
+{
+    "appname":"Editor de Texto",
+    "desc":"text-editor",
+    "version": "1.0",
+    "appindex": "index.html",
+    "logo":"assets/img/icon.png"
+}

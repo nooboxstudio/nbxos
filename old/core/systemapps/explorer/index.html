@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NBX File Explorer</title>
+  <link rel="shortcut icon" href="assets/img/icon.png" type="image/x-icon">
+  <link rel="stylesheet" href="assets/styles/interface.css">
+  <style>
+    .content div {
+        display: none;
+    }
+    .content div.active {
+        display: block;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="toolbar">
+    <!--<img src="assets/img/toolbar.png" height="35px" alt="">-->
+    <div class="toolbar-item">
+        <div class="dropdown">
+          <div class="dropbtn">
+            <img src="assets/img/icons/new.png" height="27px" alt="">
+          </div>
+          <div class="dropdown-content">
+            <a href="#" id="new-folder-desktop">Nova Pasta</a>
+            <a href="#" id="new-file-desktop">Novo Arquivo</a>
+          </div>
+      </div>
+    </div>  
+      <div class="toolbar-item" >
+        <button>
+          <img src="assets/img/icons/cut.png"  height="27px" alt="" id="cut-button" title="Recortar">
+        </button>
+      </div>
+      <div class="toolbar-item">
+        <button>
+          <img src="assets/img/icons/copy.png" id="copy-button" height="27px" alt=""  title="Copiar">
+        </button>
+      </div>
+      <div class="toolbar-item">
+        <button >
+          <img src="assets/img/icons/paste.png" height="27px" alt="" id="paste-button" title="cColar">
+        </button>
+      </div>
+      <div class="toolbar-item">
+        <button>
+          <img src="assets/img/icons/rename.png" height="27px" alt="" id="rename-button" title="Renomear">
+        </button>
+      </div>
+      <div class="toolbar-item">
+        <button>
+          <img src="assets/img/icons/trash.png" height="27px" alt="" id="delete-button"  title="Excluir">
+        </button>
+      </div>
+      
+      <!--<div class="toolbar-item">
+        <button title="Restore">
+          <img src="assets/img/icons/restore.png" height="27px" alt="" id="restore-button">
+        </button>
+      </div>-->
+</div>
+
+
+    </div>
+  </div>
+  <div class="sidebar">
+    <div class="folder-list" id="folder-list">
+      <a href="#" data-target="desktop"><div class="item"><img src="assets/img/folder.png" width="18px">Desktop</div></a>
+      <a href="#" data-target="documents"><div class="item"><img src="assets/img/folder.png" width="18px">Documentos</div></a>
+      <a href="#" data-target="images"><div class="item"><img src="assets/img/folder.png" width="18px">Imagens</div></a>
+      <a href="#" data-target="musics"><div class="item"><img src="assets/img/folder.png" width="18px">Músicas</div></a>
+      <a href="#" data-target="videos"><div class="item"><img src="assets/img/folder.png" width="18px">Vídeos</div></a>
+    </div>
+    <br>
+    <div class="divisor"></div>
+    <a href="#" data-target="trash">
+      <div class="trashcan">
+        <img src="assets/img/trashcan.png" width="18px">
+        Lixeira
+      </div>
+    </a>
+  </div>
+
+  <div class="view">
+    <div id="content" class="content">
+      <div id="desktop" class="active"></div>
+      <div id="documents"></div>
+      <div id="images"></div>
+      <div id="musics"></div>
+      <div id="videos"></div>
+      <div id="trash">Lixeira</div>
+    </div>
+  </div>
+
+  <!-- Menu de Contexto -->
+  <div id="context-menu-item" class="context-menu-item">
+    <ul>
+      <li id="copy">Copiar</li>
+      <li id="cut">Recortar</li>
+      <li id="delete">Deletar</li>
+    </ul>
+  </div>
+
+<div id="rename-container" style="display: none;">
+  <input type="text" id="rename-input" />
+  <button id="rename-confirm-button">Confirmar</button>
+</div>
+
+  <script src="../../assets/js/script.js"></script>
+</body>
+</html>
